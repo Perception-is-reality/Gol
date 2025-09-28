@@ -1,0 +1,97 @@
+:root {
+  --ir-main: #a78bfa;    /* açık mor */
+  --ir-accent: #60a5fa;  /* açık mavi */
+  --ir-muted: #b7c8e9;   /* yumuşak mavi */
+  --ir-bg: #f8faff;      /* beyazımsı arka plan */
+  --text-color: #222;    /* siyah metin */
+}
+body {
+  margin: 0;
+  font-family: Inter, Poppins, Arial, sans-serif;
+  background: var(--ir-bg);
+  color: var(--text-color);
+  font-size: 16px;
+}
+.header-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 24px 20px;
+  background: linear-gradient(90deg, var(--ir-main) 0%, var(--ir-accent) 100%);
+  color: #fff;
+  box-shadow: 0 2px 16px rgba(160,160,255,0.08);
+}
+.header-left { display: flex; align-items: center; gap: 18px; }
+.ir-logo { display:inline-block; vertical-align:middle; }
+.ir-logo svg { height:54px; width:auto; display:block; }
+.site-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--ir-main);
+  margin: 0;
+}
+.site-desc {
+  font-size: 1rem;
+  color: var(--ir-muted);
+  margin: 0;
+}
+.nav-main {
+  display: flex;
+  gap: 20px;
+}
+.nav-main a {
+  color: var(--ir-accent);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 8px 0;
+  border-bottom: 2px solid transparent;
+  transition: border-color .2s, color .2s;
+}
+.nav-main a:hover, .nav-main a.active {
+  border-bottom: 2px solid var(--ir-accent);
+  color: var(--ir-main);
+}
+.font-size-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 20px;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+.font-size-bar label {
+  font-weight: 500;
+}
+.font-size-bar select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--ir-muted);
+  background: #fff;
+  color: var(--text-color);
+  font-family: inherit;
+}
+@media (max-width:700px) {
+  .header-main { flex-direction: column; align-items: flex-start; padding: 16px 10px; }
+  .header-left { margin-bottom: 10px; }
+  .site-title { font-size: 1.4rem; }
+  .ir-logo svg { height:38px; }
+}
+main {
+  background: var(--ir-bg);
+  color: var(--text-color);
+}
+section {
+  background: #fff;
+  margin: 22px 0;
+  border-radius: 13px;
+  box-shadow: 0 2px 12px rgba(160,160,255,0.06);
+}
+h2 {
+  color: var(--ir-main);
+}
+a {
+  color: var(--ir-accent);
+}
