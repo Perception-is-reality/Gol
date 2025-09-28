@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ohm Kanunu Hesaplayıcı</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, button { margin: 5px; }
+  </style>
+</head>
+<body>
+  <h2>Ohm Kanunu Hesaplayıcı</h2>
+  <label>Akım (I, Amper):</label>
+  <input id="current" type="number"><br>
+  <label>Direnç (R, Ohm):</label>
+  <input id="resistance" type="number"><br>
+  <button onclick="calculate()">Hesapla</button>
+  <p id="result"></p>
+
+  <script>
+    function calculate() {
+      let I = parseFloat(document.getElementById("current").value);
+      let R = parseFloat(document.getElementById("resistance").value);
+      if (!isNaN(I) && !isNaN(R)) {
+        let V = I * R;
+        document.getElementById("result").innerText = "Gerilim (V): " + V + " Volt";
+      } else {
+        document.getElementById("result").innerText = "Lütfen geçerli değerler giriniz.";
+      }
+    }
+  </script>
+</body>
+</html>
