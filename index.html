@@ -3,306 +3,90 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Bilgi ve Araçlar | Hesaplayıcılar & Masallar</title>
-  <meta name="description" content="Hukuki dilekçe oluşturucu, mühendislik hesaplayıcıları, pratik araçlar ve masal köşesi. Netlify & GitHub dostu tek sayfa site." />
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
-  <!-- Open Graph / Twitter metadata -->
-  <meta property="og:title" content="Bilgi ve Araçlar | Hesaplayıcılar & Masallar" />
-  <meta property="og:description" content="Hukuki dilekçe, mühendislik hesaplayıcıları, pratik araçlar ve masal köşesi. Netlify & GitHub dostu tek sayfa site." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://perception-is-reality.github.io/Gol/" />
-  <meta property="og:image" content="favicon.ico" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Bilgi ve Araçlar | Hesaplayıcılar & Masallar" />
-  <meta name="twitter:description" content="Hukuki dilekçe, hesaplayıcılar, masal köşesi. Netlify & GitHub dostu tek sayfa site." />
-  <meta name="twitter:image" content="favicon.ico" />
-  <style>
-    :root{
-      --bg:#0f1724; --card:#0b1220; --accent:#60a5fa; --muted:#94a3b8; --text:#e6eef8;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;color:var(--text);background:linear-gradient(180deg,#071024, #072033);min-height:100vh}
-    header{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-    h1{font-size:18px;margin:0}
-    nav a{color:var(--muted);text-decoration:none;margin-left:12px;font-size:14px}
-    .container{max-width:980px;margin:14px auto;padding:16px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
-    .card{background:rgba(255,255,255,0.03);padding:14px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
-    label{display:block;font-size:13px;color:var(--muted);margin:8px 0 6px}
-    input[type="text"], input[type="number"], input[type="date"], textarea, select{
-      width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text);
-    }
-    button{background:var(--accent);color:#05223e;padding:8px 10px;border-radius:10px;border:none;cursor:pointer;font-weight:600}
-    small{color:var(--muted)}
-    pre{white-space:pre-wrap;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;overflow:auto}
-    footer{padding:18px;text-align:center;color:var(--muted);font-size:13px}
-    .row{display:flex;gap:8px;flex-wrap:wrap}
-    @media (max-width:520px){header{flex-direction:column;align-items:flex-start} nav a{margin-left:6px;margin-top:6px}}
-  </style>
+  <title>InsightReads | Bilgi ve Araçlar</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <div>
-      <h1>Bilgi & Araçlar</h1>
-      <small style="color:var(--muted)">Hukuk • Teknoloji • Masal</small>
+  <!-- Header + Menü -->
+  <header class="header-main">
+    <div class="header-left">
+      <span class="ir-logo" title="InsightReads">
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="InsightReads ikon">
+          <rect x="6" y="6" width="108" height="108" rx="18" fill="white" opacity="0.02"/>
+          <!-- stilize kitap -->
+          <g transform="translate(12,18)" stroke="var(--ir-main)" stroke-width="4" fill="none">
+            <path d="M0 6 C16 0, 44 0, 60 6 L60 66 C44 60, 16 60, 0 66 Z"/>
+            <path d="M8 18 L52 18" stroke="var(--ir-muted)" stroke-width="2"/>
+          </g>
+          <!-- küçük büyüteç/ışık -->
+          <g transform="translate(70,14)">
+            <circle cx="16" cy="18" r="10" fill="none" stroke="var(--ir-main)" stroke-width="3"/>
+            <rect x="28" y="32" width="10" height="4" rx="2" transform="rotate(35 28 32)" fill="var(--ir-main)"/>
+            <path d="M8 2 L-6 -12" stroke="var(--ir-accent)" stroke-width="3" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </span>
+      <div>
+        <h1 class="site-title">InsightReads</h1>
+        <p class="site-desc">Açık bilgi, pratik araçlar ve kolay erişim.</p>
+      </div>
     </div>
-    <nav>
+    <nav class="nav-main">
+      <a href="#anasayfa" class="active">Ana Sayfa</a>
       <a href="#dilekce">Dilekçe</a>
       <a href="#ohm">Ohm Hesaplayıcı</a>
-      <a href="#tarih">Tarih Farkı</a>
       <a href="#masal">Masal Üretici</a>
+      <a href="#iletisim">İletişim</a>
     </nav>
   </header>
-
-  <main class="container">
-    <section id="hero" class="card" style="margin-bottom:14px">
-      <h2 style="margin:0 0 8px">Hoşgeldin 👋</h2>
-      <p style="margin:0;color:var(--muted)">Bu sayfa Netlify & GitHub ile yayınlanmaya hazır mini araç koleksiyonudur. Aşağıdan dilekçe oluşturabilir, basit mühendislik hesaplamaları yapabilir veya kısa bir masal üretebilirsin.</p>
+  <!-- Yazı boyutu seçici -->
+  <div class="font-size-bar">
+    <label for="font-size">Yazı Boyutu:</label>
+    <select id="font-size" onchange="changeFontSize()">
+      <option value="15">Küçük</option>
+      <option value="16" selected>Normal</option>
+      <option value="18">Büyük</option>
+      <option value="20">Çok Büyük</option>
+    </select>
+  </div>
+  <!-- Ana içerik -->
+  <main>
+    <section id="anasayfa" style="padding:36px 20px;">
+      <h2>Hoşgeldiniz 👋</h2>
+      <p>InsightReads, açık bilgiye, pratik hesaplayıcı ve araçlara hızlı erişim için tasarlanmış modern bir platformdur.</p>
+      <ul>
+        <li>Dilekçe oluşturucu</li>
+        <li>Ohm kanunu ve diğer hesaplayıcılar</li>
+        <li>Çocuklar için masal üretici</li>
+        <li>Ve daha fazlası!</li>
+      </ul>
+      <p>Dilediğiniz aracı üstteki menüden seçebilirsiniz.</p>
     </section>
-
-    <div class="grid">
-      <!-- Dilekçe Oluşturucu -->
-      <section id="dilekce" class="card">
-        <h3>Dilekçe Oluşturucu</h3>
-        <small>Formu doldur, dilekçeni hazırla. İndir veya panoya kopyala.</small>
-
-        <label>Ad Soyad</label>
-        <input id="d_name" type="text" placeholder="Örn: Ahmet Yılmaz">
-
-        <label>T.C. Kimlik / Referans (opsiyonel)</label>
-        <input id="d_tc" type="text" placeholder="Örn: 1xxxxxxxxxx">
-
-        <label>Dilekçe Gönderilecek Kurum</label>
-        <input id="d_to" type="text" placeholder="Örn: T.C. Cumhuriyet Başsavcılığı">
-
-        <label>Konu Başlığı</label>
-        <input id="d_subject" type="text" placeholder="Konu">
-
-        <label>Açıklama / Talep</label>
-        <textarea id="d_body" rows="6" placeholder="Talebinizi kısa ve net yazınız..."></textarea>
-
-        <label>Tarih / Yer</label>
-        <input id="d_place" type="text" placeholder="İstanbul, 28 Eylül 2025">
-
-        <div class="row" style="margin-top:10px">
-          <button onclick="generateDilekce()">Dilekçe Oluştur</button>
-          <button onclick="copyDilekce()">Panoya Kopyala</button>
-          <button onclick="downloadDilekce()">İndir (.txt)</button>
-        </div>
-
-        <h4 style="margin-top:12px">Oluşan Dilekçe</h4>
-        <pre id="d_result" aria-live="polite">Dilekçe henüz oluşturulmadı.</pre>
-      </section>
-
-      <!-- Ohm Hesaplayıcı -->
-      <section id="ohm" class="card">
-        <h3>Ohm Kanunu Hesaplayıcı</h3>
-        <small>İki değeri gir, üçüncüyü hesaplasın. (V = I × R)</small>
-
-        <label>Gerilim (V, Volt)</label>
-        <input id="v" type="number" step="any" placeholder="Örn: 12">
-
-        <label>Akım (I, Amper)</label>
-        <input id="i" type="number" step="any" placeholder="Örn: 2">
-
-        <label>Direnç (R, Ohm)</label>
-        <input id="r" type="number" step="any" placeholder="Örn: 6">
-
-        <div class="row" style="margin-top:10px">
-          <button onclick="calculateOhm()">Hesapla</button>
-          <button onclick="clearOhm()">Temizle</button>
-        </div>
-
-        <h4 style="margin-top:12px">Sonuç</h4>
-        <pre id="ohm_result">Henüz hesaplanmadı.</pre>
-      </section>
-
-      <!-- Tarih Farkı -->
-      <section id="tarih" class="card">
-        <h3>Tarih Farkı Hesaplayıcı</h3>
-        <small>İki tarih arası gün/hafta/yıl hesabı.</small>
-
-        <label>Başlangıç</label>
-        <input id="date1" type="date">
-
-        <label>Bitiş</label>
-        <input id="date2" type="date">
-
-        <div style="margin-top:10px" class="row">
-          <button onclick="dateDiff()">Hesapla</button>
-          <button onclick="clearDates()">Temizle</button>
-        </div>
-
-        <h4 style="margin-top:12px">Sonuç</h4>
-        <pre id="date_result">Henüz hesaplanmadı.</pre>
-      </section>
-
-      <!-- Masal Üretici -->
-      <section id="masal" class="card">
-        <h3>Masal Üretici</h3>
-        <small>Kısa bir uyku masalı üretir — çocuklar için uygun, sade dil.</small>
-
-        <label>Başkahraman (opsiyonel)</label>
-        <input id="hero" type="text" placeholder="Örn: İnal">
-
-        <label>Yer (opsiyonel)</label>
-        <input id="place" type="text" placeholder="Örn: Orvaris">
-
-        <label>Uzunluk</label>
-        <select id="length">
-          <option value="short">Kısa (1 paragraf)</option>
-          <option value="medium" selected>Orta (2-3 paragraf)</option>
-          <option value="long">Uzun (4 paragraf)</option>
-        </select>
-
-        <div style="margin-top:10px" class="row">
-          <button onclick="generateStory()">Masal Üret</button>
-          <button onclick="copyStory()">Kopyala</button>
-        </div>
-
-        <h4 style="margin-top:12px">Masal</h4>
-        <pre id="story_result">Henüz bir masal üretilmedi.</pre>
-      </section>
-    </div>
-
-    <!-- Bilgilendirme / Lisans -->
-    <section class="card" style="margin-top:14px">
-      <h3>Projeye Dair</h3>
-      <p style="color:var(--muted)">Bu proje örnek amaçlıdır. Kod MIT lisansı ile paylaşılabilir. Netlify veya GitHub Pages üzerinde barındırılmaya uygundur. İstersen bu repo'yu GitHub'a koyup Netlify'e bağlayarak otomatik yayın alabilirsin.</p>
-      <p style="margin:0"><small style="color:var(--muted)">İyi çalışmalar — yeni araçlar eklememi istersen söyle yeter :)</small></p>
+    <section id="dilekce" style="padding:32px 20px;">
+      <h2>Dilekçe Oluşturucu</h2>
+      <p>Kişisel veya resmi dilekçeleriniz için hızlı metin üretin.</p>
+      <!-- Buraya form eklenebilir -->
+    </section>
+    <section id="ohm" style="padding:32px 20px;">
+      <h2>Ohm Kanunu Hesaplayıcı</h2>
+      <p>Elektrik mühendisliği için hızlı ve pratik hesaplama aracı.</p>
+      <!-- Buraya hesaplayıcı eklenebilir -->
+    </section>
+    <section id="masal" style="padding:32px 20px;">
+      <h2>Masal Üretici</h2>
+      <p>Çocuklar için otomatik, eğlenceli masallar oluşturun.</p>
+      <!-- Buraya masal üretici eklenecek -->
+    </section>
+    <section id="iletisim" style="padding:32px 20px;">
+      <h2>İletişim</h2>
+      <p>Görüş, öneri veya katkı için <a href="mailto:info@insightreads.com">info@insightreads.com</a> adresine yazabilirsiniz.</p>
     </section>
   </main>
-
-  <footer>
-    © 2025 — MIT Lisansı. Kod ve içerik düzenlenebilir. <br>
-    Küçük bir proje — büyük fikirler için başlangıç.
-  </footer>
-
   <script>
-    // --- Dilekçe ---
-    function sanitize(s){ return String(s || '').trim(); }
-
-    function generateDilekce(){
-      const name = sanitize(document.getElementById('d_name').value) || '[Ad Soyad]';
-      const tc = sanitize(document.getElementById('d_tc').value);
-      const to = sanitize(document.getElementById('d_to').value) || 'İlgili Kurum';
-      const subj = sanitize(document.getElementById('d_subject').value) || 'Konu:';
-      const body = sanitize(document.getElementById('d_body').value) || 'Talebim aşağıda belirtilmiştir:';
-      const place = sanitize(document.getElementById('d_place').value) || '—';
-      let header = `${to}\n\nT.C. ${name}${tc ? ' — ' + tc : ''}\n\nKONU: ${subj}\n\n`;
-      const full = `${header}${body}\n\nGereğinin yapılmasını arz ederim.\n\n${place}\n\n${name}`;
-      document.getElementById('d_result').innerText = full;
+    function changeFontSize() {
+      var size = document.getElementById('font-size').value;
+      document.body.style.fontSize = size + 'px';
     }
-
-    function copyDilekce(){
-      const txt = document.getElementById('d_result').innerText;
-      navigator.clipboard?.writeText(txt).then(()=> alert('Dilekçe panoya kopyalandı.'), ()=> alert('Kopyalama başarısız.'));
-    }
-
-    function downloadDilekce(){
-      const txt = document.getElementById('d_result').innerText;
-      const fn = (document.getElementById('d_subject').value || 'dilekce').replace(/\s+/g,'_') + '.txt';
-      const blob = new Blob([txt], {type:'text/plain;charset=utf-8'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = fn; document.body.appendChild(a); a.click();
-      setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 500);
-    }
-
-    // --- Ohm Hesaplayıcı ---
-    function calculateOhm(){
-      const vEl = document.getElementById('v'), iEl = document.getElementById('i'), rEl = document.getElementById('r');
-      const V = parseFloat(vEl.value); const I = parseFloat(iEl.value); const R = parseFloat(rEl.value);
-      let out = '';
-
-      // Count how many provided
-      const provided = [!isNaN(V), !isNaN(I), !isNaN(R)].filter(Boolean).length;
-      if(provided < 2) {
-        out = 'Lütfen iki değeri girin; üçüncüsü otomatik hesaplansın.';
-      } else {
-        // If V and I -> R
-        if(!isNaN(V) && !isNaN(I) && isNaN(R)){
-          const r = V / I;
-          out = `R = V / I = ${V} / ${I} = ${round(r)} Ω`;
-        }
-        // If V and R -> I
-        else if(!isNaN(V) && isNaN(I) && !isNaN(R)){
-          const i = V / R;
-          out = `I = V / R = ${V} / ${R} = ${round(i)} A`;
-        }
-        // If I and R -> V
-        else if(isNaN(V) && !isNaN(I) && !isNaN(R)){
-          const v = I * R;
-          out = `V = I × R = ${I} × ${R} = ${round(v)} V`;
-        } else {
-          // all three provided — check consistency
-          const consistent = Math.abs(V - (I * R || 0)) < (Math.max(1e-6, Math.abs(V)*1e-9));
-          if(consistent) out = `Girilen değerler uyumlu. V = ${round(V)}, I = ${round(I)}, R = ${round(R)}.`;
-          else out = `Girilen değerler uyumsuz. Kontrol edin. (V ≠ I × R: ${round(I*R)} )`;
-        }
-      }
-      document.getElementById('ohm_result').innerText = out;
-    }
-    function clearOhm(){ document.getElementById('v').value=''; document.getElementById('i').value=''; document.getElementById('r').value=''; document.getElementById('ohm_result').innerText='Henüz hesaplanmadı.'; }
-    function round(n){ return Math.round((n + Number.EPSILON)*100000)/100000; }
-
-    // --- Tarih Farkı ---
-    function dateDiff(){
-      const d1 = document.getElementById('date1').value;
-      const d2 = document.getElementById('date2').value;
-      if(!d1 || !d2){ alert('Lütfen iki tarih seçin.'); return; }
-      const t1 = new Date(d1), t2 = new Date(d2);
-      const diffMs = Math.abs(t2 - t1);
-      const days = Math.floor(diffMs / (1000*60*60*24));
-      const weeks = Math.floor(days / 7);
-      const years = (days / 365).toFixed(2);
-      document.getElementById('date_result').innerText = `Aradaki süre: ${days} gün ≈ ${weeks} hafta ≈ ${years} yıl. (${t1.toLocaleDateString()} ↔ ${t2.toLocaleDateString()})`;
-    }
-    function clearDates(){ document.getElementById('date1').value=''; document.getElementById('date2').value=''; document.getElementById('date_result').innerText='Henüz hesaplanmadı.'; }
-
-    // --- Masal Üretici ---
-    const defaults = {
-      heroes: ['İnal','Küçük Mira','Tay','Arin','Efsunlu Çocuk','Yaşlı Bilgin'],
-      places: ['Orvaris','Zentaris Yolu','Bir uzak gezegen','Kayıp ada','Ay tepesi'],
-      events: ['kayıp bir harita buldu','gizemli bir ışık gördü','yeni bir arkadaş edindi','cesur bir karar verdi','büyük bir kapı keşfetti','gizemleri çözdü']
-    };
-
-    function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-
-    function generateStory(){
-      const heroInput = sanitize(document.getElementById('hero').value);
-      const placeInput = sanitize(document.getElementById('place').value);
-      const length = document.getElementById('length').value;
-      const hero = heroInput || pick(defaults.heroes);
-      const place = placeInput || pick(defaults.places);
-      // build paragraphs based on length
-      const paragraphs = (length === 'short') ? 1 : (length === 'medium') ? 2 : 4;
-      let story = '';
-      for(let p=0;p<paragraphs;p++){ 
-        const ev = pick(defaults.events);
-        const opening = (p===0) ? `${hero}, ${place}’da yaşıyordu. Bir gün ${ev}.` : `Sonra ${hero} yine bir maceraya atıldı ve ${pick(defaults.events)}.`;
-        const middle = `Yol boyunca yeni şeyler öğrendi ve cesaretinin ne kadar değerli olduğunu gördü.`;
-        const end = (p === paragraphs-1) ? `En sonunda evine döndü; gün batarken umut dolu bir şekilde uykuya daldı.` : '';
-        story += opening + ' ' + middle + (end ? (' ' + end) : '') + '\n\n';
-      }
-      document.getElementById('story_result').innerText = story.trim();
-    }
-
-    function copyStory(){
-      const txt = document.getElementById('story_result').innerText;
-      if(!txt || txt.startsWith('Henüz')) { alert('Önce bir masal üretin.'); return; }
-      navigator.clipboard?.writeText(txt).then(()=> alert('Masal panoya kopyalandı.'), ()=> alert('Kopyalama başarısız.'));
-    }
-
-    // Small UX: set today's date default for d_place if empty
-    (function init(){
-      const dd = new Date();
-      const p = dd.toLocaleDateString('tr-TR', {day:'numeric', month:'long', year:'numeric'});
-      if(!document.getElementById('d_place').value) document.getElementById('d_place').value = `İstanbul, ${p}`;
-      // optional: set date2 to today
-      const y = dd.getFullYear(), m = String(dd.getMonth()+1).padStart(2,'0'), d = String(dd.getDate()).padStart(2,'0');
-      document.getElementById('date2').value = `${y}-${m}-${d}`;
-    })();
   </script>
 </body>
 </html>
