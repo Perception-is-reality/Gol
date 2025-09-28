@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karmaşık Hesap Makinesi</title>
+  <script src="https://cdn.jsdelivr.net/npm/mathjs@11.11.0/lib/browser/math.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #7ee8fa 0%, #eec0c6 100%);
+      margin: 0;
+      padding: 0;
+    }
+    .calc-container {
+      max-width: 380px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 32px 24px 24px 24px;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h2 {
+      text-align: center;
+      color: #3a3a3a;
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+    }
+    input {
+      font-size: 1.1em;
+      padding: 10px;
+      margin: 8px 0;
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid #d6d6d6;
+      box-sizing: border-box;
+      transition: box-shadow .2s;
+    }
+    input:focus {
+      box-shadow: 0 0 4px #7ee8fa;
+      outline: none;
+    }
+    button {
+      font-size: 1.15em;
+      font-weight: bold;
+      padding: 11px 0;
+      width: 100%;
+      margin-top: 12px;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #7ee8fa 0%, #eec0c6 100%);
+      color: #333;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(126,232,250,0.18);
+      transition: background .2s, box-shadow .2s;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #eec0c6 0%, #7ee8fa 100%);
+      box-shadow: 0 4px 16px rgba(238,192,198,0.22);
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 1.23em;
+      color: #444;
+      background: #f6faff;
+      border-radius: 6px;
+      padding: 12px 0;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 1px 4px rgba(126,232,250,0.13);
+    }
+    .help {
+      margin-top: 14px;
+      font-size: 0.98em;
+      color: #666;
+      background: #fffdfa;
+      border-radius: 6px;
+      padding: 10px;
+      box-shadow: 0 1px 4px rgba(238,192,198,0.09);
+    }
+    @media (max-width: 480px) {
+      .calc-container {
+        padding: 18px 8px 16px 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <h2>Karmaşık Hesap Makinesi</h2>
+    <input type="text" id="expression" placeholder="Matematiksel ifadeyi yazın (örn: (3+2)*sin(30))">
+    <button onclick="calculate()">Hesapla</button>
+    <div class="result" id="result"></div>
+    <div class="help">
+      Örnekler:<br>
+      <b>Parantez:</b> (3+2)*(7-4)<br>
+      <b>Üs alma:</b> 2^8 veya pow(2,8)<br>
+      <b>Karekök:</b> sqrt(16)<br>
+      <b>Trigonometrik:</b> sin(30), cos(45), tan(60)<br>
+      <b>Logaritma:</b> log(100)<br>
+      <b>Pİ:</b> pi<br>
+      <b>Ondalık ayırıcı:</b> Nokta (3.14)<br>
+      <b>Mutlak değer:</b> abs(-5)
+    </div>
+  </div>
+  <script>
+    function calculate() {
+      const expr = document.getElementById('expression').value;
+      let result = '';
+      try {
+        result = math.evaluate(expr);
+        if (typeof result === 'function') result = 'Fonksiyon tamamlanamadı!';
+        if (typeof result === 'object') result = JSON.stringify(result);
+      } catch (e) {
+        result = 'Hatalı ifade!';
+      }
+      document.getElementById('result').textContent = "Sonuç: " + result;
+    }
+  </script>
+</body>
+</html>
