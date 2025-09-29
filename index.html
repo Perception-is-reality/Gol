@@ -2,36 +2,18 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>InsightReads | Bilgi ve Araçlar</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- Header + Menü -->
   <header class="header-main">
-    <div class="header-left">
-      <span class="ir-logo" title="InsightReads">
-        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="InsightReads ikon">
-          <rect x="6" y="6" width="108" height="108" rx="18" fill="white" opacity="0.02"/>
-          <!-- stilize kitap -->
-          <g transform="translate(12,18)" stroke="var(--ir-main)" stroke-width="4" fill="none">
-            <path d="M0 6 C16 0, 44 0, 60 6 L60 66 C44 60, 16 60, 0 66 Z"/>
-            <path d="M8 18 L52 18" stroke="var(--ir-muted)" stroke-width="2"/>
-          </g>
-          <!-- küçük büyüteç/ışık -->
-          <g transform="translate(70,14)">
-            <circle cx="16" cy="18" r="10" fill="none" stroke="var(--ir-main)" stroke-width="3"/>
-            <rect x="28" y="32" width="10" height="4" rx="2" transform="rotate(35 28 32)" fill="var(--ir-main)"/>
-            <path d="M8 2 L-6 -12" stroke="var(--ir-accent)" stroke-width="3" stroke-linecap="round"/>
-          </g>
-        </svg>
-      </span>
-      <div>
-        <h1 class="site-title">InsightReads</h1>
-        <p class="site-desc">Açık bilgi, pratik araçlar ve kolay erişim.</p>
-      </div>
+    <div class="logo fade-in">
+      <span class="icon">🔍</span>
+      <span class="text">InsightReads</span>
     </div>
-    <nav class="nav-main">
+    <nav class="nav-main fade-in">
       <a href="#anasayfa" class="active">Ana Sayfa</a>
       <a href="#dilekce">Dilekçe</a>
       <a href="#ohm">Ohm Hesaplayıcı</a>
@@ -39,54 +21,72 @@
       <a href="#iletisim">İletişim</a>
     </nav>
   </header>
+
   <!-- Yazı boyutu seçici -->
-  <div class="font-size-bar">
+  <div class="font-size-bar fade-in">
     <label for="font-size">Yazı Boyutu:</label>
     <select id="font-size" onchange="changeFontSize()">
-      <option value="15">Küçük</option>
+      <option value="14">Küçük</option>
       <option value="16" selected>Normal</option>
       <option value="18">Büyük</option>
       <option value="20">Çok Büyük</option>
     </select>
   </div>
+
   <!-- Ana içerik -->
   <main>
-    <section id="anasayfa" style="padding:36px 20px;">
-      <h2>Hoşgeldiniz 👋</h2>
-      <p>InsightReads, açık bilgiye, pratik hesaplayıcı ve araçlara hızlı erişim için tasarlanmış modern bir platformdur.</p>
-      <ul>
-        <li>Dilekçe oluşturucu</li>
-        <li>Ohm kanunu ve diğer hesaplayıcılar</li>
-        <li>Çocuklar için masal üretici</li>
-        <li>Ve daha fazlası!</li>
-      </ul>
-      <p>Dilediğiniz aracı üstteki menüden seçebilirsiniz.</p>
+    <section id="anasayfa" class="hero fade-up">
+      <h1>Hoşgeldin 👋</h1>
+      <p class="subtitle">Başlamak için menüden bir araç seçin.</p>
     </section>
-    <section id="dilekce" style="padding:32px 20px;">
+
+    <section id="dilekce" class="fade-up">
       <h2>Dilekçe Oluşturucu</h2>
       <p>Kişisel veya resmi dilekçeleriniz için hızlı metin üretin.</p>
-      <!-- Buraya form eklenebilir -->
     </section>
-    <section id="ohm" style="padding:32px 20px;">
+
+    <section id="ohm" class="fade-up">
       <h2>Ohm Kanunu Hesaplayıcı</h2>
       <p>Elektrik mühendisliği için hızlı ve pratik hesaplama aracı.</p>
-      <!-- Buraya hesaplayıcı eklenebilir -->
     </section>
-    <section id="masal" style="padding:32px 20px;">
+
+    <section id="masal" class="fade-up">
       <h2>Masal Üretici</h2>
       <p>Çocuklar için otomatik, eğlenceli masallar oluşturun.</p>
-      <!-- Buraya masal üretici eklenecek -->
     </section>
-    <section id="iletisim" style="padding:32px 20px;">
+
+    <section id="iletisim" class="fade-up">
       <h2>İletişim</h2>
-      <p>Görüş, öneri veya katkı için <a href="mailto:info@insightreads.com">info@insightreads.com</a> adresine yazabilirsiniz.</p>
+      <p>Görüş, öneri veya katkı için 
+        <a href="mailto:info@insightreads.com">info@insightreads.com</a> adresine yazabilirsiniz.
+      </p>
     </section>
   </main>
+
   <script>
     function changeFontSize() {
       var size = document.getElementById('font-size').value;
-      document.body.style.fontSize = size + 'px';
+      document.documentElement.style.fontSize = size + 'px';
     }
+
+    // Fade animasyonu scroll ile tetikle
+    const faders = document.querySelectorAll('.fade-up');
+    const appearOptions = {
+      threshold: 0.2
+    };
+
+    const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('appear');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, appearOptions);
+
+    faders.forEach(fader => {
+      appearOnScroll.observe(fader);
+    });
   </script>
 </body>
 </html>
