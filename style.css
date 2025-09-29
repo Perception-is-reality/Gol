@@ -139,4 +139,40 @@ p, li {
 
 @keyframes fadeIn {
   to { opacity: 1; }
+}/* Header Top (Logo + Arama) */
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.8rem 1rem;
+}
+
+.header-top .logo {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+}
+
+.header-top .logo .icon {
+  margin-right: 0.5rem;
+  color: var(--brand-accent);
+}
+
+.header-top .search input {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.9rem;
+  width: 160px;
+  transition: width 0.3s ease;
+}
+
+.header-top .search input:focus {
+  width: 220px;
+  outline: none;
 }
