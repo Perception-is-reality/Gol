@@ -3,29 +3,46 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>InsightReads | Bilgi ve Araçlar</title>
-  <link rel="stylesheet" href="style.css">
+  <title>InsightReads</title>
   <style>
     body {
-      font-family: 'Inter', sans-serif;
       margin: 0;
+      font-family: 'Inter', sans-serif;
       background: #f5f5f5;
-      color: #222;
     }
 
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #fff;
       padding: 14px 20px;
+      background: #fff;
       border-bottom: 1px solid #ddd;
+      position: relative;
     }
 
     .logo {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .logo span {
       font-size: 1.6rem;
       font-weight: bold;
-      color: #DC2626;
+      color: #DC2626; /* kırmızı */
+    }
+
+    .search {
+      margin-top: 6px;
+    }
+
+    .search input {
+      padding: 6px 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      width: 160px;
     }
 
     .menu-btn {
@@ -37,9 +54,14 @@
 
     nav {
       display: none;
-      flex-direction: column;
+      position: absolute;
+      top: 60px;
+      right: 20px;
       background: #fff;
-      border-top: 1px solid #ddd;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      flex-direction: column;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
     nav a {
@@ -56,207 +78,29 @@
     .show {
       display: flex;
     }
-
-    main {
-      padding: 40px 20px;
-      text-align: center;
-    }
-
-    h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      color: #DC2626;
-    }
-
-    .quick-menu {
-      margin: 40px 0;
-    }
-
-    .quick-menu h3 {
-      color: #333;
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-    }
-
-    .quick-menu a {
-      display: inline-block;
-      margin: 10px;
-      padding: 12px 20px;
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      color: #222;
-      font-weight: 500;
-      transition: all 0.3s;
-    }
-
-    .quick-menu a:hover {
-      background: #DC2626;
-      color: #fff;
-    }
-
-    .contact {
-      background: #f97316; /* Turuncu */
-      color: #fff;
-      padding: 50px 20px;
-      margin-top: 40px;
-    }
-
-    .contact h3 {
-      font-size: 2rem;
-      margin-bottom: 15px;
-    }
-
-    .contact a {
-      color: #fff;
-      font-weight: bold;
-      text-decoration: underline;
-    }
-
-    /* Dilekçe formu */
-    #dilekce {
-      background: #fff;
-      padding: 30px;
-      margin: 40px auto;
-      max-width: 600px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      text-align: left;
-      display: none; /* 👈 Başlangıçta gizli */
-    }
-
-    #dilekce h3 {
-      color: #DC2626;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    #dilekce label {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-
-    #dilekce input, #dilekce textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-
-    #dilekce button {
-      margin-top: 20px;
-      padding: 12px 20px;
-      background: #DC2626;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s;
-    }
-
-    #dilekce button:hover {
-      background: #a81c1c;
-    }
   </style>
 </head>
 <body>
   <header>
-    <div class="logo">InsightReads</div>
-    <button class="menu-btn" onclick="toggleMenu()">☰</button>
-  </header>
-
-  <nav id="menu">
-    <a href="#anasayfa" onclick="showSection('anasayfa')">Ana Sayfa</a>
-    <a href="#dilekce" onclick="showSection('dilekce')">Dilekçe</a>
-    <a href="#ohm">Ohm Hesaplayıcı</a>
-    <a href="#masal">Masal Üretici</a>
-  </nav>
-
-  <main>
-    <section id="anasayfa">
-      <h2>Hoşgeldiniz 👋</h2>
-      <p>Başlamak için menüden veya hızlı menüden bir araç seçin.</p>
-
-      <div class="quick-menu">
-        <h3>⚡ Hızlı Menü</h3>
-        <a href="#dilekce" onclick="showSection('dilekce')">📄 Dilekçe Oluşturucu</a>
-        <a href="#ohm">🔌 Ohm Hesaplayıcı</a>
-        <a href="#masal">📖 Masal Üretici</a>
+    <div class="logo">
+      <span>InsightReads</span>
+      <div class="search">
+        <input type="text" placeholder="Ara..." />
       </div>
-    </section>
-
-    <!-- 📄 Dilekçe Formu (Başlangıçta gizli) -->
-    <section id="dilekce">
-      <h3>📄 Dilekçe Oluşturucu</h3>
-      <form id="dilekceForm">
-        <label>Ad Soyad:</label>
-        <input type="text" id="adsoyad" required>
-
-        <label>Adres:</label>
-        <input type="text" id="adres" required>
-
-        <label>Tarih:</label>
-        <input type="date" id="tarih" required>
-
-        <label>Konu:</label>
-        <input type="text" id="konu" required>
-
-        <label>Metin:</label>
-        <textarea id="metin" rows="6" required></textarea>
-
-        <button type="button" onclick="indir()">📥 Word İndir</button>
-      </form>
-    </section>
-
-    <section class="contact" id="iletisim">
-      <h3>📬 İletişim</h3>
-      <p>Görüş, öneri veya katkı için bize ulaşabilirsiniz:</p>
-      <p><a href="mailto:thecrucialread@gmail.com">info@insightreads.com</a></p>
-    </section>
-  </main>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/file-saver.js/2.0.5/FileSaver.min.js"></script>
+    </div>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <nav id="menu">
+      <a href="#araclar">Araçlar</a>
+      <a href="#notlarim">Notlarım</a>
+      <a href="#ayarlar">Ayarlar</a>
+      <a href="#yardim">Yardım</a>
+    </nav>
+  </header>
 
   <script>
     function toggleMenu() {
       document.getElementById('menu').classList.toggle('show');
     }
-
-    function showSection(id) {
-      document.querySelectorAll("main section").forEach(sec => sec.style.display = "none");
-      document.getElementById(id).style.display = "block";
-      document.getElementById('menu').classList.remove('show');
-    }
-
-    function indir() {
-      const adsoyad = document.getElementById("adsoyad").value;
-      const adres = document.getElementById("adres").value;
-      const tarih = document.getElementById("tarih").value;
-      const konu = document.getElementById("konu").value;
-      const metin = document.getElementById("metin").value;
-
-      const content =
-`T.C.
-............. MAKAMINA
-
-Konu: ${konu}
-
-${metin}
-
-Adres: ${adres}
-Ad Soyad: ${adsoyad}
-Tarih: ${tarih}`;
-
-      const blob = new Blob([content], { type: "application/msword" });
-      saveAs(blob, "dilekce.doc");
-    }
-
-    // Varsayılan olarak sadece anasayfa görünsün
-    showSection('anasayfa');
   </script>
 </body>
 </html>
