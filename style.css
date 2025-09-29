@@ -1,97 +1,142 @@
+/* Genel renk paleti */
 :root {
-  --ir-main: #a78bfa;    /* açık mor */
-  --ir-accent: #60a5fa;  /* açık mavi */
-  --ir-muted: #b7c8e9;   /* yumuşak mavi */
-  --ir-bg: #f8faff;      /* beyazımsı arka plan */
-  --text-color: #222;    /* siyah metin */
+  --bg-main: #111111;
+  --text-main: #f5f5f5;
+  --brand-main: #DC2626;
+  --brand-accent: #F97316;
+  --text-muted: #999999;
 }
-body {
-  margin: 0;
-  font-family: Inter, Poppins, Arial, sans-serif;
-  background: var(--ir-bg);
-  color: var(--text-color);
+
+/* Genel */
+html {
   font-size: 16px;
 }
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Header */
 .header-main {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 24px 20px;
-  background: linear-gradient(90deg, var(--ir-main) 0%, var(--ir-accent) 100%);
-  color: #fff;
-  box-shadow: 0 2px 16px rgba(160,160,255,0.08);
+  padding: 1.2rem;
+  background: var(--brand-main);
 }
-.header-left { display: flex; align-items: center; gap: 18px; }
-.ir-logo { display:inline-block; vertical-align:middle; }
-.ir-logo svg { height:54px; width:auto; display:block; }
-.site-title {
-  font-size: 2.2rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: var(--ir-main);
-  margin: 0;
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0.8rem;
 }
-.site-desc {
-  font-size: 1rem;
-  color: var(--ir-muted);
-  margin: 0;
+
+.logo .icon {
+  margin-right: 0.6rem;
+  color: var(--brand-accent);
 }
+
+/* Menü */
 .nav-main {
   display: flex;
-  gap: 20px;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
+
 .nav-main a {
-  color: var(--ir-accent);
+  color: white;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 1.05rem;
-  padding: 8px 0;
-  border-bottom: 2px solid transparent;
-  transition: border-color .2s, color .2s;
-}
-.nav-main a:hover, .nav-main a.active {
-  border-bottom: 2px solid var(--ir-accent);
-  color: var(--ir-main);
-}
-.font-size-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 12px 20px;
-  font-size: 1rem;
-  color: var(--text-color);
-}
-.font-size-bar label {
   font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
-.font-size-bar select {
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid var(--ir-muted);
-  background: #fff;
-  color: var(--text-color);
-  font-family: inherit;
+
+.nav-main a:hover {
+  color: var(--brand-accent);
+  transform: translateY(-2px);
 }
-@media (max-width:700px) {
-  .header-main { flex-direction: column; align-items: flex-start; padding: 16px 10px; }
-  .header-left { margin-bottom: 10px; }
-  .site-title { font-size: 1.4rem; }
-  .ir-logo svg { height:38px; }
+
+.nav-main a.active::after {
+  content: '';
+  display: block;
+  height: 2px;
+  background: var(--brand-accent);
+  margin-top: 4px;
+  transition: width 0.4s ease;
 }
-main {
-  background: var(--ir-bg);
-  color: var(--text-color);
+
+/* Yazı boyutu seçici */
+.font-size-bar {
+  background: #222;
+  padding: 0.8rem 1.2rem;
+  text-align: center;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #333;
 }
-section {
-  background: #fff;
-  margin: 22px 0;
-  border-radius: 13px;
-  box-shadow: 0 2px 12px rgba(160,160,255,0.06);
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 6rem 2rem;
 }
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  color: var(--brand-accent);
+  margin: 0;
+}
+
+.hero .subtitle {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+}
+
+/* İçerik */
+main section {
+  padding: 3rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
 h2 {
-  color: var(--ir-main);
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: var(--brand-accent);
+  margin-bottom: 1rem;
 }
-a {
-  color: var(--ir-accent);
+
+p, li {
+  font-size: 1rem;
+}
+
+/* Animasyonlar */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 1.2s ease-out forwards;
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.fade-up.appear {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
 }
