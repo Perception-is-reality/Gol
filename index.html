@@ -113,8 +113,8 @@
       text-decoration: underline;
     }
 
-    /* Ortak form kutusu */
-    .form-box {
+    /* Dilekçe formu */
+    #dilekce {
       background: #fff;
       padding: 30px;
       margin: 40px auto;
@@ -122,21 +122,22 @@
       border-radius: 10px;
       border: 1px solid #ddd;
       text-align: left;
+      display: none; /* 👈 Başlangıçta gizli */
     }
 
-    .form-box h3 {
+    #dilekce h3 {
       color: #DC2626;
       margin-bottom: 20px;
       text-align: center;
     }
 
-    .form-box label {
+    #dilekce label {
       display: block;
       margin-top: 10px;
       font-weight: bold;
     }
 
-    .form-box input, .form-box textarea, .form-box select {
+    #dilekce input, #dilekce textarea {
       width: 100%;
       padding: 10px;
       margin-top: 6px;
@@ -145,7 +146,7 @@
       font-size: 1rem;
     }
 
-    .form-box button {
+    #dilekce button {
       margin-top: 20px;
       padding: 12px 20px;
       background: #DC2626;
@@ -157,16 +158,8 @@
       transition: background 0.3s;
     }
 
-    .form-box button:hover {
+    #dilekce button:hover {
       background: #a81c1c;
-    }
-
-    #masalSonuc {
-      margin-top: 15px;
-      background: #f0f0f0;
-      padding: 15px;
-      border-radius: 8px;
-      font-style: italic;
     }
   </style>
 </head>
@@ -179,12 +172,11 @@
   <nav id="menu">
     <a href="#anasayfa" onclick="showSection('anasayfa')">Ana Sayfa</a>
     <a href="#dilekce" onclick="showSection('dilekce')">Dilekçe</a>
-    <a href="#ohm" onclick="showSection('ohm')">Ohm Hesaplayıcı</a>
-    <a href="#masal" onclick="showSection('masal')">Masal Üretici</a>
+    <a href="#ohm">Ohm Hesaplayıcı</a>
+    <a href="#masal">Masal Üretici</a>
   </nav>
 
   <main>
-    <!-- Ana Sayfa -->
     <section id="anasayfa">
       <h2>Hoşgeldiniz 👋</h2>
       <p>Başlamak için menüden veya hızlı menüden bir araç seçin.</p>
@@ -192,13 +184,13 @@
       <div class="quick-menu">
         <h3>⚡ Hızlı Menü</h3>
         <a href="#dilekce" onclick="showSection('dilekce')">📄 Dilekçe Oluşturucu</a>
-        <a href="#ohm" onclick="showSection('ohm')">🔌 Ohm Hesaplayıcı</a>
-        <a href="#masal" onclick="showSection('masal')">📖 Masal Üretici</a>
+        <a href="#ohm">🔌 Ohm Hesaplayıcı</a>
+        <a href="#masal">📖 Masal Üretici</a>
       </div>
     </section>
 
-    <!-- Dilekçe Formu -->
-    <section id="dilekce" class="form-box" style="display:none;">
+    <!-- 📄 Dilekçe Formu (Başlangıçta gizli) -->
+    <section id="dilekce">
       <h3>📄 Dilekçe Oluşturucu</h3>
       <form id="dilekceForm">
         <label>Ad Soyad:</label>
@@ -220,33 +212,6 @@
       </form>
     </section>
 
-    <!-- Ohm Hesaplayıcı -->
-    <section id="ohm" class="form-box" style="display:none;">
-      <h3>🔌 Ohm Hesaplayıcı</h3>
-      <label>Gerilim (V):</label>
-      <input type="number" id="volt" placeholder="Volt">
-
-      <label>Akım (I):</label>
-      <input type="number" id="amp" placeholder="Amper">
-
-      <button type="button" onclick="hesaplaOhm()">Direnci Hesapla (R = V / I)</button>
-      <div id="ohmSonuc"></div>
-    </section>
-
-    <!-- Masal Üretici -->
-    <section id="masal" class="form-box" style="display:none;">
-      <h3>📖 Masal Üretici</h3>
-      <label>Kahraman adı:</label>
-      <input type="text" id="kahraman" placeholder="Örn: Ayşe">
-
-      <label>Yer:</label>
-      <input type="text" id="yer" placeholder="Örn: Orman">
-
-      <button type="button" onclick="uretMasal()">Masalı Oluştur</button>
-      <div id="masalSonuc"></div>
-    </section>
-
-    <!-- İletişim -->
     <section class="contact" id="iletisim">
       <h3>📬 İletişim</h3>
       <p>Görüş, öneri veya katkı için bize ulaşabilirsiniz:</p>
@@ -267,7 +232,6 @@
       document.getElementById('menu').classList.remove('show');
     }
 
-    // Dilekçe indir
     function indir() {
       const adsoyad = document.getElementById("adsoyad").value;
       const adres = document.getElementById("adres").value;
@@ -289,26 +253,6 @@ Tarih: ${tarih}`;
 
       const blob = new Blob([content], { type: "application/msword" });
       saveAs(blob, "dilekce.doc");
-    }
-
-    // Ohm Hesaplayıcı
-    function hesaplaOhm() {
-      const v = parseFloat(document.getElementById("volt").value);
-      const i = parseFloat(document.getElementById("amp").value);
-      if (!isNaN(v) && !isNaN(i) && i !== 0) {
-        const r = (v / i).toFixed(2);
-        document.getElementById("ohmSonuc").innerText = `Direnç: ${r} Ω`;
-      } else {
-        document.getElementById("ohmSonuc").innerText = "Lütfen geçerli değerler giriniz.";
-      }
-    }
-
-    // Masal Üretici (basit demo)
-    function uretMasal() {
-      const kahraman = document.getElementById("kahraman").value || "Kahraman";
-      const yer = document.getElementById("yer").value || "uzak bir diyar";
-      const masal = `${kahraman}, ${yer}da yaşayan cesur biriydi. Bir gün büyük bir maceraya atıldı... 🌟`;
-      document.getElementById("masalSonuc").innerText = masal;
     }
 
     // Varsayılan olarak sadece anasayfa görünsün
