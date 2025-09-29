@@ -112,6 +112,53 @@
       font-weight: bold;
       text-decoration: underline;
     }
+
+    /* Dilekçe formu */
+    #dilekce {
+      background: #fff;
+      padding: 30px;
+      margin: 40px auto;
+      max-width: 600px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    #dilekce h3 {
+      color: #DC2626;
+      margin-bottom: 20px;
+    }
+
+    #dilekce label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    #dilekce input, #dilekce textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    #dilekce button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      background: #DC2626;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    #dilekce button:hover {
+      background: #a81c1c;
+    }
   </style>
 </head>
 <body>
@@ -140,6 +187,29 @@
       <a href="#masal">📖 Masal Üretici</a>
     </section>
 
+    <!-- 📄 Dilekçe Formu -->
+    <section id="dilekce">
+      <h3>📄 Dilekçe Oluşturucu</h3>
+      <form id="dilekceForm">
+        <label>Ad Soyad:</label>
+        <input type="text" id="adsoyad" required>
+
+        <label>Adres:</label>
+        <input type="text" id="adres" required>
+
+        <label>Tarih:</label>
+        <input type="date" id="tarih" required>
+
+        <label>Konu:</label>
+        <input type="text" id="konu" required>
+
+        <label>Metin:</label>
+        <textarea id="metin" rows="6" required></textarea>
+
+        <button type="button" onclick="indir()">📥 Word İndir</button>
+      </form>
+    </section>
+
     <section class="contact" id="iletisim">
       <h3>📬 İletişim</h3>
       <p>Görüş, öneri veya katkı için bize ulaşabilirsiniz:</p>
@@ -147,9 +217,36 @@
     </section>
   </main>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.36.0/docxtemplater.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.1.1/pizzip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/file-saver.js/2.0.5/FileSaver.min.js"></script>
+
   <script>
     function toggleMenu() {
       document.getElementById('menu').classList.toggle('show');
+    }
+
+    function indir() {
+      const adsoyad = document.getElementById("adsoyad").value;
+      const adres = document.getElementById("adres").value;
+      const tarih = document.getElementById("tarih").value;
+      const konu = document.getElementById("konu").value;
+      const metin = document.getElementById("metin").value;
+
+      const content =
+`T.C.
+............. MAKAMINA
+
+Konu: ${konu}
+
+${metin}
+
+Adres: ${adres}
+Ad Soyad: ${adsoyad}
+Tarih: ${tarih}`;
+
+      const blob = new Blob([content], { type: "application/msword" });
+      saveAs(blob, "dilekce.doc");
     }
   </script>
 </body>
