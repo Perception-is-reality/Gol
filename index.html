@@ -113,8 +113,8 @@
       text-decoration: underline;
     }
 
-    /* Dilekçe formu */
-    #dilekce {
+    /* Ortak form kutusu */
+    .form-box {
       background: #fff;
       padding: 30px;
       margin: 40px auto;
@@ -124,18 +124,19 @@
       text-align: left;
     }
 
-    #dilekce h3 {
+    .form-box h3 {
       color: #DC2626;
       margin-bottom: 20px;
+      text-align: center;
     }
 
-    #dilekce label {
+    .form-box label {
       display: block;
       margin-top: 10px;
       font-weight: bold;
     }
 
-    #dilekce input, #dilekce textarea {
+    .form-box input, .form-box textarea, .form-box select {
       width: 100%;
       padding: 10px;
       margin-top: 6px;
@@ -144,7 +145,7 @@
       font-size: 1rem;
     }
 
-    #dilekce button {
+    .form-box button {
       margin-top: 20px;
       padding: 12px 20px;
       background: #DC2626;
@@ -156,8 +157,16 @@
       transition: background 0.3s;
     }
 
-    #dilekce button:hover {
+    .form-box button:hover {
       background: #a81c1c;
+    }
+
+    #masalSonuc {
+      margin-top: 15px;
+      background: #f0f0f0;
+      padding: 15px;
+      border-radius: 8px;
+      font-style: italic;
     }
   </style>
 </head>
@@ -168,27 +177,28 @@
   </header>
 
   <nav id="menu">
-    <a href="#anasayfa">Ana Sayfa</a>
-    <a href="#dilekce">Dilekçe</a>
-    <a href="#ohm">Ohm Hesaplayıcı</a>
-    <a href="#masal">Masal Üretici</a>
+    <a href="#anasayfa" onclick="showSection('anasayfa')">Ana Sayfa</a>
+    <a href="#dilekce" onclick="showSection('dilekce')">Dilekçe</a>
+    <a href="#ohm" onclick="showSection('ohm')">Ohm Hesaplayıcı</a>
+    <a href="#masal" onclick="showSection('masal')">Masal Üretici</a>
   </nav>
 
   <main>
+    <!-- Ana Sayfa -->
     <section id="anasayfa">
       <h2>Hoşgeldiniz 👋</h2>
       <p>Başlamak için menüden veya hızlı menüden bir araç seçin.</p>
+
+      <div class="quick-menu">
+        <h3>⚡ Hızlı Menü</h3>
+        <a href="#dilekce" onclick="showSection('dilekce')">📄 Dilekçe Oluşturucu</a>
+        <a href="#ohm" onclick="showSection('ohm')">🔌 Ohm Hesaplayıcı</a>
+        <a href="#masal" onclick="showSection('masal')">📖 Masal Üretici</a>
+      </div>
     </section>
 
-    <section class="quick-menu">
-      <h3>⚡ Hızlı Menü</h3>
-      <a href="#dilekce">📄 Dilekçe Oluşturucu</a>
-      <a href="#ohm">🔌 Ohm Hesaplayıcı</a>
-      <a href="#masal">📖 Masal Üretici</a>
-    </section>
-
-    <!-- 📄 Dilekçe Formu -->
-    <section id="dilekce">
+    <!-- Dilekçe Formu -->
+    <section id="dilekce" class="form-box" style="display:none;">
       <h3>📄 Dilekçe Oluşturucu</h3>
       <form id="dilekceForm">
         <label>Ad Soyad:</label>
@@ -210,6 +220,33 @@
       </form>
     </section>
 
+    <!-- Ohm Hesaplayıcı -->
+    <section id="ohm" class="form-box" style="display:none;">
+      <h3>🔌 Ohm Hesaplayıcı</h3>
+      <label>Gerilim (V):</label>
+      <input type="number" id="volt" placeholder="Volt">
+
+      <label>Akım (I):</label>
+      <input type="number" id="amp" placeholder="Amper">
+
+      <button type="button" onclick="hesaplaOhm()">Direnci Hesapla (R = V / I)</button>
+      <div id="ohmSonuc"></div>
+    </section>
+
+    <!-- Masal Üretici -->
+    <section id="masal" class="form-box" style="display:none;">
+      <h3>📖 Masal Üretici</h3>
+      <label>Kahraman adı:</label>
+      <input type="text" id="kahraman" placeholder="Örn: Ayşe">
+
+      <label>Yer:</label>
+      <input type="text" id="yer" placeholder="Örn: Orman">
+
+      <button type="button" onclick="uretMasal()">Masalı Oluştur</button>
+      <div id="masalSonuc"></div>
+    </section>
+
+    <!-- İletişim -->
     <section class="contact" id="iletisim">
       <h3>📬 İletişim</h3>
       <p>Görüş, öneri veya katkı için bize ulaşabilirsiniz:</p>
@@ -217,8 +254,6 @@
     </section>
   </main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.36.0/docxtemplater.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip/3.1.1/pizzip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/file-saver.js/2.0.5/FileSaver.min.js"></script>
 
   <script>
@@ -226,6 +261,13 @@
       document.getElementById('menu').classList.toggle('show');
     }
 
+    function showSection(id) {
+      document.querySelectorAll("main section").forEach(sec => sec.style.display = "none");
+      document.getElementById(id).style.display = "block";
+      document.getElementById('menu').classList.remove('show');
+    }
+
+    // Dilekçe indir
     function indir() {
       const adsoyad = document.getElementById("adsoyad").value;
       const adres = document.getElementById("adres").value;
@@ -248,6 +290,29 @@ Tarih: ${tarih}`;
       const blob = new Blob([content], { type: "application/msword" });
       saveAs(blob, "dilekce.doc");
     }
+
+    // Ohm Hesaplayıcı
+    function hesaplaOhm() {
+      const v = parseFloat(document.getElementById("volt").value);
+      const i = parseFloat(document.getElementById("amp").value);
+      if (!isNaN(v) && !isNaN(i) && i !== 0) {
+        const r = (v / i).toFixed(2);
+        document.getElementById("ohmSonuc").innerText = `Direnç: ${r} Ω`;
+      } else {
+        document.getElementById("ohmSonuc").innerText = "Lütfen geçerli değerler giriniz.";
+      }
+    }
+
+    // Masal Üretici (basit demo)
+    function uretMasal() {
+      const kahraman = document.getElementById("kahraman").value || "Kahraman";
+      const yer = document.getElementById("yer").value || "uzak bir diyar";
+      const masal = `${kahraman}, ${yer}da yaşayan cesur biriydi. Bir gün büyük bir maceraya atıldı... 🌟`;
+      document.getElementById("masalSonuc").innerText = masal;
+    }
+
+    // Varsayılan olarak sadece anasayfa görünsün
+    showSection('anasayfa');
   </script>
 </body>
 </html>
