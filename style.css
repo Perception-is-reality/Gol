@@ -139,7 +139,9 @@ p, li {
 
 @keyframes fadeIn {
   to { opacity: 1; }
-}/* Header Top (Logo + Arama) */
+}
+
+/* Header Top (Logo + Arama) */
 .header-top {
   display: flex;
   justify-content: space-between;
@@ -175,4 +177,44 @@ p, li {
 .header-top .search input:focus {
   width: 220px;
   outline: none;
+}
+
+/* Header Bottom (Anasayfa + Menü) */
+.header-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.6rem 1rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.header-bottom .home a {
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.header-bottom .home a:hover {
+  color: var(--brand-accent);
+}
+
+.header-bottom .nav-main {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.header-bottom .nav-main a {
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.header-bottom .nav-main a:hover {
+  color: var(--brand-accent);
+  transform: translateY(-2px);
 }
