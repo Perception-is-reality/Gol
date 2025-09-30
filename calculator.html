@@ -1,125 +1,200 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Karmaşık Hesap Makinesi</title>
-  <script src="https://cdn.jsdelivr.net/npm/mathjs@11.11.0/lib/browser/math.js"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(135deg, #7ee8fa 0%, #eec0c6 100%);
-      margin: 0;
-      padding: 0;
-    }
-    .calc-container {
-      max-width: 380px;
-      margin: 50px auto;
-      background: #fff;
-      padding: 32px 24px 24px 24px;
-      border-radius: 18px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    h2 {
-      text-align: center;
-      color: #3a3a3a;
-      margin-bottom: 24px;
-      letter-spacing: 1px;
-    }
-    input {
-      font-size: 1.1em;
-      padding: 10px;
-      margin: 8px 0;
-      width: 100%;
-      border-radius: 6px;
-      border: 1px solid #d6d6d6;
-      box-sizing: border-box;
-      transition: box-shadow .2s;
-    }
-    input:focus {
-      box-shadow: 0 0 4px #7ee8fa;
-      outline: none;
-    }
-    button {
-      font-size: 1.15em;
-      font-weight: bold;
-      padding: 11px 0;
-      width: 100%;
-      margin-top: 12px;
-      border: none;
-      border-radius: 6px;
-      background: linear-gradient(90deg, #7ee8fa 0%, #eec0c6 100%);
-      color: #333;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(126,232,250,0.18);
-      transition: background .2s, box-shadow .2s;
-    }
-    button:hover {
-      background: linear-gradient(90deg, #eec0c6 0%, #7ee8fa 100%);
-      box-shadow: 0 4px 16px rgba(238,192,198,0.22);
-    }
-    .result {
-      margin-top: 20px;
-      font-weight: bold;
-      font-size: 1.23em;
-      color: #444;
-      background: #f6faff;
-      border-radius: 6px;
-      padding: 12px 0;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 1px 4px rgba(126,232,250,0.13);
-    }
-    .help {
-      margin-top: 14px;
-      font-size: 0.98em;
-      color: #666;
-      background: #fffdfa;
-      border-radius: 6px;
-      padding: 10px;
-      box-shadow: 0 1px 4px rgba(238,192,198,0.09);
-    }
-    @media (max-width: 480px) {
-      .calc-container {
-        padding: 18px 8px 16px 8px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gelişmiş Hesap Makinesi</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
+<style>
+body { font-family: Arial, sans-serif; background:#222; color:#fff; display:flex; justify-content:center; padding:20px; }
+.container { width: 400px; background:#333; padding:20px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.5);}
+h2 { text-align:center; margin-bottom:10px; }
+.display { width:100%; height:50px; font-size:22px; text-align:right; padding:10px; margin-bottom:10px; border-radius:5px; border:none; color:#000;}
+.buttons { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:10px;}
+button { padding:12px; font-size:16px; border-radius:5px; border:none; cursor:pointer; background:#555; color:#fff; transition:.2s;}
+button:hover { background:#777;}
+.operator { background:#f97316;}
+.operator:hover { background:#dc2626;}
+select, input { padding:8px; margin-bottom:10px; width:100%; border-radius:5px; border:1px solid #ccc; color:#000;}
+.result { margin-top:10px; font-size:16px; text-align:center; color:#fff; }
+hr { border:0.5px solid #555; margin:15px 0; }
+</style>
 </head>
 <body>
-  <div class="calc-container">
-    <h2>Karmaşık Hesap Makinesi</h2>
-    <input type="text" id="expression" placeholder="Matematiksel ifadeyi yazın (örn: (3+2)*sin(30))">
-    <button onclick="calculate()">Hesapla</button>
-    <div class="result" id="result"></div>
-    <div class="help">
-      Örnekler:<br>
-      <b>Parantez:</b> (3+2)*(7-4)<br>
-      <b>Üs alma:</b> 2^8 veya pow(2,8)<br>
-      <b>Karekök:</b> sqrt(16)<br>
-      <b>Trigonometrik:</b> sin(30), cos(45), tan(60)<br>
-      <b>Logaritma:</b> log(100)<br>
-      <b>Pİ:</b> pi<br>
-      <b>Ondalık ayırıcı:</b> Nokta (3.14)<br>
-      <b>Mutlak değer:</b> abs(-5)
-    </div>
+
+<div class="container">
+  <h2>Bilimsel Hesap Makinesi</h2>
+  <input type="text" class="display" id="display" placeholder="0" disabled>
+  <div class="buttons">
+    <button onclick="append('7')">7</button>
+    <button onclick="append('8')">8</button>
+    <button onclick="append('9')">9</button>
+    <button class="operator" onclick="append('/')">/</button>
+    <button class="operator" onclick="append('sqrt(')">√</button>
+
+    <button onclick="append('4')">4</button>
+    <button onclick="append('5')">5</button>
+    <button onclick="append('6')">6</button>
+    <button class="operator" onclick="append('*')">*</button>
+    <button class="operator" onclick="append('^')">^</button>
+
+    <button onclick="append('1')">1</button>
+    <button onclick="append('2')">2</button>
+    <button onclick="append('3')">3</button>
+    <button class="operator" onclick="append('-')">-</button>
+    <button class="operator" onclick="append('(')">(</button>
+
+    <button onclick="append('0')">0</button>
+    <button onclick="append('.')">.</button>
+    <button class="operator" onclick="calculate()">=</button>
+    <button class="operator" onclick="append('+')">+</button>
+    <button class="operator" onclick="append(')')">)</button>
+
+    <button class="operator" onclick="append('sin(')">sin</button>
+    <button class="operator" onclick="append('cos(')">cos</button>
+    <button class="operator" onclick="append('tan(')">tan</button>
+    <button class="operator" onclick="append('log(')">log</button>
+    <button style="background:#999;" onclick="clearDisplay()">C</button>
   </div>
-  <script>
-    function calculate() {
-      const expr = document.getElementById('expression').value;
-      let result = '';
-      try {
-        result = math.evaluate(expr);
-        if (typeof result === 'function') result = 'Fonksiyon tamamlanamadı!';
-        if (typeof result === 'object') result = JSON.stringify(result);
-      } catch (e) {
-        result = 'Hatalı ifade!';
-      }
-      document.getElementById('result').textContent = "Sonuç: " + result;
-    }
-  </script>
+
+  <hr>
+
+  <h2>Ohm Kanunu</h2>
+  <select id="calculateFor">
+    <option value="V">Gerilim (V)</option>
+    <option value="I">Akım (I)</option>
+    <option value="R">Direnç (R)</option>
+  </select>
+  <input type="number" id="value1" placeholder="Birinci değer">
+  <input type="number" id="value2" placeholder="İkinci değer">
+  <button onclick="calculateOhm()">Hesapla</button>
+  <div class="result" id="result"></div>
+
+  <hr>
+
+  <h2>Önceden Tanımlı Formüller</h2>
+  <select id="formulaSelect" onchange="selectFormula()">
+    <option value="">Formül Seç</option>
+    <option value="areaSquare">Kare Alanı: a²</option>
+    <option value="areaRectangle">Dikdörtgen Alanı: a*b</option>
+    <option value="areaCircle">Daire Alanı: π*r²</option>
+    <option value="volumeCube">Küp Hacmi: a³</option>
+    <option value="volumeCylinder">Silindir Hacmi: π*r²*h</option>
+    <option value="kineticEnergy">Kinetik Enerji: 0.5*m*v²</option>
+    <option value="potentialEnergy">Potansiyel Enerji: m*g*h</option>
+  </select>
+  <div id="formulaInputs"></div>
+  <button onclick="calculateFormula()">Hesapla</button>
+  <div class="result" id="formulaResult"></div>
+
+  <hr>
+
+  <h2>Birim Dönüştürücü</h2>
+  <select id="unitType" onchange="updateUnits()">
+    <option value="">Birim Tipi</option>
+    <option value="length">Uzunluk</option>
+    <option value="weight">Ağırlık</option>
+    <option value="temperature">Sıcaklık</option>
+    <option value="volume">Hacim</option>
+  </select>
+  <input type="number" id="unitValue" placeholder="Değer Girin">
+  <select id="unitFrom"></select>
+  <select id="unitTo"></select>
+  <button onclick="convertUnit()">Dönüştür</button>
+  <div class="result" id="unitResult"></div>
+</div>
+
+<script>
+const display = document.getElementById('display');
+
+function append(value){ display.value += value; }
+function clearDisplay(){ display.value = ''; }
+function calculate(){
+  try { display.value = math.evaluate(display.value); }
+  catch(e){ display.value='Hata'; }
+}
+
+function calculateOhm(){
+  const calcFor=document.getElementById('calculateFor').value;
+  const val1=parseFloat(document.getElementById('value1').value);
+  const val2=parseFloat(document.getElementById('value2').value);
+  let result;
+  if(isNaN(val1)||isNaN(val2)){ document.getElementById('result').innerText="Lütfen geçerli değer girin!"; return; }
+  switch(calcFor){
+    case 'V': result=val1*val2; document.getElementById('result').innerText=`Gerilim V = ${result.toFixed(2)} Volt`; break;
+    case 'I': if(val2===0){document.getElementById('result').innerText="Direnç 0 olamaz!"; return;} result=val1/val2; document.getElementById('result').innerText=`Akım I = ${result.toFixed(2)} Amper`; break;
+    case 'R': if(val2===0){document.getElementById('result').innerText="Akım 0 olamaz!"; return;} result=val1/val2; document.getElementById('result').innerText=`Direnç R = ${result.toFixed(2)} Ohm`; break;
+  }
+}
+
+// Formüller
+function selectFormula(){
+  const f=document.getElementById('formulaSelect').value;
+  const container=document.getElementById('formulaInputs');
+  container.innerHTML='';
+  switch(f){
+    case 'areaSquare': container.innerHTML='<input id="a" placeholder="Kenar a">'; break;
+    case 'areaRectangle': container.innerHTML='<input id="a" placeholder="Kenar a"><input id="b" placeholder="Kenar b">'; break;
+    case 'areaCircle': container.innerHTML='<input id="r" placeholder="Yarıçap r">'; break;
+    case 'volumeCube': container.innerHTML='<input id="a" placeholder="Kenar a">'; break;
+    case 'volumeCylinder': container.innerHTML='<input id="r" placeholder="Yarıçap r"><input id="h" placeholder="Yükseklik h">'; break;
+    case 'kineticEnergy': container.innerHTML='<input id="m" placeholder="Kütle m"><input id="v" placeholder="Hız v">'; break;
+    case 'potentialEnergy': container.innerHTML='<input id="m" placeholder="Kütle m"><input id="h" placeholder="Yükseklik h">'; break;
+  }
+}
+
+function calculateFormula(){
+  const f=document.getElementById('formulaSelect').value;
+  let res;
+  switch(f){
+    case 'areaSquare': res=Math.pow(parseFloat(document.getElementById('a').value),2); break;
+    case 'areaRectangle': res=parseFloat(document.getElementById('a').value)*parseFloat(document.getElementById('b').value); break;
+    case 'areaCircle': res=Math.PI*Math.pow(parseFloat(document.getElementById('r').value),2); break;
+    case 'volumeCube': res=Math.pow(parseFloat(document.getElementById('a').value),3); break;
+    case 'volumeCylinder': res=Math.PI*Math.pow(parseFloat(document.getElementById('r').value),2)*parseFloat(document.getElementById('h').value); break;
+    case 'kineticEnergy': res=0.5*parseFloat(document.getElementById('m').value)*Math.pow(parseFloat(document.getElementById('v').value),2); break;
+    case 'potentialEnergy': res=parseFloat(document.getElementById('m').value)*9.81*parseFloat(document.getElementById('h').value); break;
+  }
+  document.getElementById('formulaResult').innerText='Sonuç: '+res.toFixed(2);
+}
+
+// Birim dönüştürücü
+const units={ 
+  length:{m:1, cm:0.01, km:1000, inch:0.0254},
+  weight:{kg:1, g:0.001, lb:0.453592},
+  volume:{L:1, mL:0.001, m3:1000},
+};
+
+function updateUnits(){
+  const type=document.getElementById('unitType').value;
+  const from=document.getElementById('unitFrom');
+  const to=document.getElementById('unitTo');
+  from.innerHTML=''; to.innerHTML='';
+  if(type==='temperature'){
+    ['C','F','K'].forEach(u=>{ from.innerHTML+=`<option value="${u}">${u}</option>`; to.innerHTML+=`<option value="${u}">${u}</option>`; });
+    return;
+  }
+  if(units[type]){
+    Object.keys(units[type]).forEach(u=>{ from.innerHTML+=`<option value="${u}">${u}</option>`; to.innerHTML+=`<option value="${u}">${u}</option>`; });
+  }
+}
+
+function convertUnit(){
+  const type=document.getElementById('unitType').value;
+  let val=parseFloat(document.getElementById('unitValue').value);
+  const from=document.getElementById('unitFrom').value;
+  const to=document.getElementById('unitTo').value;
+  let result;
+  if(type==='temperature'){
+    if(from==='C'){ result = to==='F'? val*9/5+32 : to==='K'? val+273.15 : val;}
+    if(from==='F'){ result = to==='C'? (val-32)*5/9 : to==='K'? (val-32)*5/9+273.15 : val;}
+    if(from==='K'){ result = to==='C'? val-273.15 : to==='F'? (val-273.15)*9/5+32 : val;}
+  } else if(units[type]){
+    result=val*units[type][from]/units[type][to];
+  }
+  document.getElementById('unitResult').innerText='Sonuç: '+result.toFixed(4);
+}
+</script>
+
 </body>
 </html>
