@@ -1,134 +1,802 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>InsightReads</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: #111;
-      color: #f5f5f5;
-    }
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>InsightReads</title>
 
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.75rem 1.25rem;
-      background: #1a1a1a;
-      border-bottom: 1px solid #333;
-      position: relative;
-    }
+    <!-- math.js (hesap makinesi için) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
 
-    /* Logo alanı */
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .logo svg {
-      height: 40px;
-      width: auto;
-    }
+    <style>
+        /* ---------- Temel Stil ---------- */
+        :root {
+            --accent: #DC2626;
+            --accent-2: #2563EB;
+            --card-bg: #fff;
+            --muted: #555;
+        }
 
-    /* Arama */
-    .search input {
-      padding: 0.5rem;
-      border-radius: 6px;
-      border: none;
-      outline: none;
-      font-size: 14px;
-    }
+        body { margin: 0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: #f5f5f5; color: #333; transition: background .25s, color .25s; }
+        body.dark { background: #121212; color: #e8e8e8; }
 
-    /* Menü butonu */
-    .menu-toggle {
-      background: none;
-      border: none;
-      color: #f5f5f5;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
+        header {
+            display:flex; align-items:center; gap:12px;
+            justify-content:space-between;
+            position:fixed; top:0; left:0; right:0;
+            background:var(--card-bg); border-bottom:1px solid #e6e6e6;
+            padding:12px 16px; z-index:1000;
+        }
+        body.dark header { background: #1e1e1e; border-color: #333; }
 
-    /* Menü */
-    nav {
-      position: absolute;
-      top: 64px;
-      right: 0;
-      background: #1a1a1a;
-      border-left: 1px solid #333;
-      border-bottom: 1px solid #333;
-      padding: 1rem;
-      display: none;
-      flex-direction: column;
-      gap: 1rem;
-      min-width: 180px;
-    }
-    nav.open {
-      display: flex;
-    }
-    nav a {
-      text-decoration: none;
-      color: #f5f5f5;
-      font-weight: 500;
-    }
-    nav a:hover {
-      color: #DC2626;
-    }
-  </style>
+        .logo { display:flex; align-items:center; gap:10px; cursor:pointer; }
+        .logo img{ height:32px; width:auto; }
+        .logo .title { font-weight:700; color:var(--accent); font-size:1.15rem; }
+
+        .search-box { flex:1; max-width:480px; margin:0 12px; }
+        .search-box input { width:100%; padding:8px 12px; border-radius:8px; border:1px solid #ccc; font-size:0.95rem; box-sizing:border-box; }
+        body.dark .search-box input { background:#222; border-color:#444; color:#eee; }
+
+        .menu-btn { font-size:20px; background:none; border:none; cursor:pointer; }
+
+        /* Sidebar menu */
+        nav {
+            position:fixed; right:-280px; top:0; height:100vh; width:280px;
+            background:var(--card-bg); box-shadow:-6px 0 30px rgba(0,0,0,0.08);
+            padding-top:64px; transition:right .28s ease; z-index:999;
+        }
+        body.dark nav { background:#1e1e1e; }
+        nav.show { right:0; }
+        nav a { display:block; padding:14px 18px; color:inherit; text-decoration:none; border-bottom:1px solid #eee; }
+        body.dark nav a { border-color:#333; }
+        nav a:hover{ background:#fafafa; }
+        body.dark nav a:hover{ background:#2a2a2a; }
+
+        .overlay { position:fixed; inset:0; background:rgba(0,0,0,0.28); display:none; z-index:998; }
+        .overlay.show { display:block; }
+
+        main { padding:84px 18px 28px; min-height:calc(100vh - 84px); box-sizing:border-box; }
+
+        /* Home content - empty per request (no welcome message) */
+        .home-empty { max-width:900px; margin:0 auto; min-height:240px; display:flex; align-items:center; justify-content:center; border-radius:12px; }
+
+        /* Tools grid */
+        .tools-container { max-width:980px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; }
+        .tool-card { background:var(--card-bg); padding:18px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.06); text-align:center; cursor:pointer; transition:transform .15s, box-shadow .15s; }
+        .tool-card:hover { transform:translateY(-6px); box-shadow:0 10px 26px rgba(0,0,0,0.08); }
+        body.dark .tool-card { background:#1b1b1b; }
+
+        /* Settings */
+        .settings-container { max-width:640px; margin:0 auto; background:var(--card-bg); padding:18px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+        body.dark .settings-container { background:#1b1b1b; }
+        .settings-item { margin-bottom:12px; }
+        .settings-item label{ display:block; margin-bottom:6px; font-weight:600; }
+        .settings-item select, .settings-item button { padding:8px 10px; border-radius:8px; border:1px solid #ccc; background:transparent; cursor:pointer; }
+        body.dark .settings-item select, body.dark .settings-item button { background:#232323; border-color:#333; color:#eee; }
+
+        /* Notes */
+        .notes-container { max-width:900px; margin:0 auto; background:var(--card-bg); padding:18px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+        body.dark .notes-container { background:#1b1b1b; }
+        .note-input { width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; margin-bottom:10px; }
+        body.dark .note-input { background:#232323; border-color:#333; color:#eee; }
+        .note-btn { background:var(--accent); color:#fff; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; }
+        .note-list{ margin-top:14px; display:flex; flex-direction:column; gap:10px; }
+        .note-item{ display:flex; justify-content:space-between; gap:12px; padding:12px; border-radius:8px; background:#fafafa; align-items:flex-start; }
+        body.dark .note-item { background:#232323; }
+        .note-item .meta { max-width:78%; }
+        .note-item strong{ display:block; margin-bottom:6px; }
+        .note-actions { display:flex; gap:8px; align-items:center; }
+
+        /* Calculator */
+        .calculator-wrapper{ margin:0 auto; width:100%; max-width:520px; }
+        .calc-container{ background:#333; color:#fff; padding:18px; border-radius:12px; box-shadow:0 8px 28px rgba(0,0,0,0.5); position:relative; }
+        .calc-container h2{ text-align:center; margin:0 0 10px; }
+        .display{ width:100%; height:54px; border-radius:8px; padding:10px; font-size:20px; text-align:right; border:none; color:#000; box-sizing:border-box; }
+        .buttons{ display:grid; grid-template-columns:repeat(6,1fr); gap:8px; margin-top:10px; }
+        .calc-container button{ padding:12px; border-radius:8px; border:none; cursor:pointer; background:#555; color:#fff; font-size:15px; }
+        .operator{ background:#f97316; }
+        .clear-btn{ background:#999; }
+        .scientific{ background:#444; }
+        .close-btn{ position:absolute; right:12px; top:12px; width:32px; height:32px; border-radius:50%; background:var(--accent); color:#fff; border:none; cursor:pointer; }
+
+        /* Misc layout */
+        .row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+        .col { flex:1; min-width:120px; }
+
+        /* Masal */
+        .masal-container { max-width:860px; margin:0 auto; background:var(--card-bg); padding:18px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+        .form-row { display:flex; gap:10px; flex-wrap:wrap; }
+        .masal-input { padding:8px; border-radius:8px; border:1px solid #ccc; width:100%; box-sizing:border-box; }
+        .masal-btn { background:#ff69b4; color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; }
+        .masal-result { margin-top:12px; padding:12px; background:#fffafc; border-radius:8px; min-height:80px; white-space:pre-wrap; text-align:left; }
+
+        /* Spinner */
+        .spinner{ border:4px solid #f3f3f3; border-top:4px solid #ff69b4; border-radius:50%; width:30px; height:30px; animation:spin 1s linear infinite; display:none; margin:10px auto; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+
+        /* Responsive tweaks */
+        @media (max-width:640px){
+            .buttons{ grid-template-columns:repeat(4,1fr); }
+            nav { width:100%; right:-100%; }
+            nav.show { right:0; }
+        }
+    </style>
 </head>
-<body>
-  <header>
-    <div class="logo">
-      <!-- Inline SVG Logo -->
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 96" role="img" aria-labelledby="logoTitle logoDesc">
-        <title id="logoTitle">InsightReads</title>
-        <desc id="logoDesc">InsightReads logo - open book icon and wordmark in red</desc>
-        <defs>
-          <style>
-            .c { fill: #DC2626; }
-            .word { font-family: Inter, sans-serif; font-weight: 700; font-size:48px; fill: #DC2626; }
-          </style>
-        </defs>
-        <g transform="translate(18,12)">
-          <path class="c" d="M0 8 C0 4 2 2 6 1 C22 -1 36 9 48 20 L48 58 C36 50 22 46 6 46 C2 46 0 45 0 40 Z"/>
-          <path class="c" d="M60 1 C64 2 66 4 66 8 L66 40 C66 45 64 46 60 46 C44 46 30 50 18 58 L18 20 C30 9 44 -1 60 1 Z"/>
-          <path fill="#FFFFFF" d="M10 16 C24 10 36 12 48 20" opacity="0.06"/>
-          <path class="c" d="M6 52 C24 56 42 56 60 52"/>
-        </g>
-        <text class="word" x="170" y="64">InsightReads</text>
-      </svg>
-    </div>
+<body onload="initApp()">
+   <header>
+        <div class="logo" onclick="loadContent('home')">
+            <img src="logo.png" alt="logo">
+            <div class="title">InsightReads</div>
+        </div>
 
-    <div class="search">
-      <input type="text" placeholder="Ara...">
-    </div>
+        <div class="search-box">
+            <input id="searchInput" placeholder="Ara... (örn: hesap, notlar, ayarlar)">
+        </div>
 
-    <button class="menu-toggle" aria-label="Menü Aç/Kapat">☰</button>
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    </header>
 
     <nav id="menu">
-      <a href="#">Araçlar</a>
-      <a href="#">Notlarım</a>
-      <a href="#">Ayarlar</a>
-      <a href="#">Yardım</a>
+        <a href="#" onclick="loadContent('tools'); toggleMenu();">📂 Araçlar</a>
+        <a href="#" onclick="loadContent('notes'); toggleMenu();">📝 Notlarım</a>
+        <a href="#" onclick="loadContent('settings'); toggleMenu();">⚙️ Ayarlar</a>
+        <a href="#" onclick="loadContent('masal'); toggleMenu();">✍️ Masal Yazma</a>
+        <a href="#" onclick="alert('Dilekçe modülü yakında...'); toggleMenu();">📄 Dilekçe</a>
+        <a href="#" onclick="alert('Yardım'); toggleMenu();">❓ Yardım</a>
     </nav>
-  </header>
 
-  <script>
-    const toggle = document.querySelector('.menu-toggle');
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <main id="main-content">
+        <!-- Ana sayfa boş bırakıldı per istek -->
+        <div class="home-empty"></div>
+    </main>
+
+<script>
+/* =========================
+   GLOBAL VE BAŞLANGIÇ
+   ========================= */
+
+const mainContent = document.getElementById('main-content');
+let currentContent = '';
+let displayEl = null; // hesap makinesi ekran referansı
+
+function initApp(){
+    // Yüklü ayarları uygula
+    loadSettingsFromStorage();
+
+    // Arama: Enter veya tam eşleşme ile
+    const s = document.getElementById('searchInput');
+    if(s){
+        s.addEventListener('keypress', (e)=>{
+            if(e.key === 'Enter') handleSearch(s.value.trim());
+        });
+    }
+
+    // ESC ile menüyü kapat
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') { closeMenuIfOpen(); } });
+}
+
+function toggleMenu(){
     const menu = document.getElementById('menu');
+    const overlay = document.getElementById('overlay');
+    menu.classList.toggle('show');
+    overlay.classList.toggle('show');
+}
 
-    toggle.addEventListener('click', () => {
-      menu.classList.toggle('open');
-    });
+function closeMenuIfOpen(){
+    const menu = document.getElementById('menu');
+    const overlay = document.getElementById('overlay');
+    if(menu.classList.contains('show')) { menu.classList.remove('show'); overlay.classList.remove('show'); }
+}
 
-    // Menü dışına tıklayınca kapansın
-    document.addEventListener('click', (e) => {
-      if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-        menu.classList.remove('open');
-      }
+/* =========================
+   ARAMA İŞLEYİCİ
+   ========================= */
+function handleSearch(query){
+    if(!query) return;
+    const q = query.toLowerCase();
+    if(q.includes('hesap') || q.includes('calculator') || q.includes('calc')) loadContent('calculator');
+    else if(q.includes('not') || q.includes('notes')) loadContent('notes');
+    else if(q.includes('ayar') || q.includes('settings')) loadContent('settings');
+    else if(q.includes('masal') || q.includes('story')) loadContent('masal');
+    else if(q.includes('araç') || q.includes('tools') || q.includes('arac')) loadContent('tools');
+    else alert(`"${query}" için bir sonuç bulunamadı. Deneyin: hesap, notlar, ayarlar, masal, araçlar`);
+    document.getElementById('searchInput').value = '';
+}
+
+/* =========================
+   SAYFA YAPILARI & ROUTING
+   ========================= */
+
+function loadContent(name){
+    if(name === currentContent) return;
+    currentContent = name;
+    mainContent.innerHTML = ''; // temizle
+
+    if(name === 'home'){
+        // Boş ana sayfa (isteğe göre placeholder bırakılmadı)
+        const div = document.createElement('div');
+        div.className = 'home-empty';
+        mainContent.appendChild(div);
+        return;
+    }
+
+    if(name === 'tools'){
+        mainContent.innerHTML = getToolsHTML();
+        return;
+    }
+
+    if(name === 'settings'){
+        mainContent.innerHTML = getSettingsHTML();
+        return;
+    }
+
+    if(name === 'notes'){
+        mainContent.innerHTML = getNotesHTML();
+        // renderNotes çağır
+        renderNotes();
+        return;
+    }
+
+    if(name === 'calculator'){
+        mainContent.innerHTML = '<div class="calculator-wrapper">' + getCalculatorHTML() + '</div>';
+        // initialize after DOM placed
+        setTimeout(()=> initializeCalculator(), 50);
+        return;
+    }
+
+    if(name === 'masal'){
+        mainContent.innerHTML = getMasalHTML();
+        return;
+    }
+
+    // fallback
+    mainContent.innerHTML = '<div style="max-width:900px;margin:0 auto;">Sayfa bulunamadı.</div>';
+}
+
+/* ---------- PAGE HTML ---------- */
+
+function getToolsHTML(){
+    return `
+    <div class="tools-container">
+        <div class="tool-card" onclick="loadContent('calculator')">🔢<br><strong>Hesap Makinesi</strong></div>
+        <div class="tool-card" onclick="loadContent('masal')">✍️<br><strong>Masal Yazma</strong></div>
+        <div class="tool-card" onclick="loadContent('notes')">📝<br><strong>Notlarım</strong></div>
+        <div class="tool-card" onclick="loadContent('settings')">⚙️<br><strong>Ayarlar</strong></div>
+        <div class="tool-card" onclick="alert('Dilekçe modülü yakında')">📄<br><strong>Dilekçe Yaz</strong></div>
+    </div>
+    `;
+}
+
+function getSettingsHTML(){
+    const savedLang = localStorage.getItem('language') || 'tr';
+    const savedFont = localStorage.getItem('fontSize') || 'normal';
+    const dark = localStorage.getItem('darkMode') === 'true';
+    return `
+    <div class="settings-container">
+        <h3>Ayarlar</h3>
+
+        <div class="settings-item">
+            <label>Karanlık Mod</label>
+            <button onclick="toggleDarkMode()">${dark ? 'Karanlık Modu Kapat' : 'Karanlık Moda Geç'}</button>
+        </div>
+
+        <div class="settings-item">
+            <label>Dil</label>
+            <select onchange="changeLanguage(this.value)">
+                <option value="tr" ${savedLang==='tr'?'selected':''}>Türkçe</option>
+                <option value="en" ${savedLang==='en'?'selected':''}>English</option>
+            </select>
+        </div>
+
+        <div class="settings-item">
+            <label>Yazı Boyutu</label>
+            <select onchange="changeFontSize(this.value)">
+                <option value="small" ${savedFont==='small'?'selected':''}>Küçük</option>
+                <option value="normal" ${savedFont==='normal'?'selected':''}>Normal</option>
+                <option value="large" ${savedFont==='large'?'selected':''}>Büyük</option>
+            </select>
+        </div>
+    </div>
+    `;
+}
+
+function getNotesHTML(){
+    return `
+    <div class="notes-container">
+        <h3>📝 Notlarım</h3>
+        <input id="noteTitle" class="note-input" placeholder="Not başlığı (opsiyonel)">
+        <textarea id="noteContent" class="note-input" placeholder="Not içeriğini yaz..." rows="5"></textarea>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <button class="note-btn" onclick="addNote()">Ekle</button>
+            <input id="noteSearch" class="note-input" placeholder="Notlarda ara..." style="flex:1;" oninput="renderNotes()">
+        </div>
+        <div id="noteList" class="note-list"></div>
+    </div>
+    `;
+}
+
+/* ---------- Masal (Story) ---------- */
+function getMasalHTML(){
+    return `
+    <div class="masal-container">
+        <h3>🌟 Masal Üretici</h3>
+        <div class="form-row" style="margin-bottom:10px;">
+            <input id="masalKahraman" class="masal-input" placeholder="Kahraman (örn: Minik Ayı)">
+            <input id="masalYer" class="masal-input" placeholder="Yer (örn: Orman)">
+        </div>
+        <div class="form-row" style="margin-bottom:10px;">
+            <input id="masalKonu" class="masal-input" placeholder="Konu (örn: Dostluk)">
+            <input id="masalDuygu" class="masal-input" placeholder="Duygu (örn: Neşeli)">
+        </div>
+        <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+            <select id="masalYas" class="masal-input" style="width:200px;">
+                <option value="2-3">2-3 Yaş</option>
+                <option value="3-4">3-4 Yaş</option>
+                <option value="5-6">5-6 Yaş</option>
+                <option value="okul-oncesi" selected>Okul Öncesi</option>
+            </select>
+            <button class="masal-btn" id="masalUretBtn" onclick="uretMasal()">✨ Masal Üret ✨</button>
+            <div id="masalSpinner" class="spinner"></div>
+        </div>
+        <div id="masalSonuc" class="masal-result">Masalınız burada belirecek...</div>
+        <div style="margin-top:12px;">
+            <button onclick="saveMasalToNotes()">Masalı Notlarıma Kaydet</button>
+        </div>
+    </div>
+    `;
+}
+
+/* ---------- Calculator HTML ---------- */
+function getCalculatorHTML(){
+    return `
+    <div class="calc-container">
+        <button class="close-btn" onclick="loadContent('home')">X</button>
+        <h2>Bilimsel Hesap Makinesi</h2>
+        <input id="display" class="display" placeholder="0" readonly>
+        <div class="buttons">
+            <button class="scientific" onclick="appendCalc('PI')">π</button>
+            <button class="scientific" onclick="appendCalc('E')">e</button>
+            <button class="scientific" onclick="appendCalc('log(')">lg</button>
+            <button class="scientific" onclick="appendCalc('log10(')">log</button>
+            <button class="scientific" onclick="appendCalc('!')">n!</button>
+            <button class="operator" onclick="calculatePercentage()">%</button>
+
+            <button onclick="appendCalc('7')">7</button>
+            <button onclick="appendCalc('8')">8</button>
+            <button onclick="appendCalc('9')">9</button>
+            <button class="operator" onclick="appendCalc('/')">/</button>
+            <button class="operator" onclick="appendCalc('sqrt(')">√</button>
+            <button class="scientific" onclick="appendCalc('^')">x^y</button>
+
+            <button onclick="appendCalc('4')">4</button>
+            <button onclick="appendCalc('5')">5</button>
+            <button onclick="appendCalc('6')">6</button>
+            <button class="operator" onclick="appendCalc('*')">*</button>
+            <button class="operator" onclick="appendCalc('(')">(</button>
+            <button class="operator" onclick="appendCalc(')')">)</button>
+
+            <button onclick="appendCalc('1')">1</button>
+            <button onclick="appendCalc('2')">2</button>
+            <button onclick="appendCalc('3')">3</button>
+            <button class="operator" onclick="appendCalc('-')">-</button>
+            <button class="scientific" onclick="appendCalc('sin(')">sin</button>
+            <button class="scientific" onclick="appendCalc('cos(')">cos</button>
+
+            <button onclick="appendCalc('0')">0</button>
+            <button onclick="appendCalc('.')">.</button>
+            <button class="operator" onclick="evaluateCalc()" style="grid-column:span 2;">=</button>
+            <button class="operator" onclick="appendCalc('+')">+</button>
+            <button class="scientific" onclick="appendCalc('tan(')">tan</button>
+            <button class="clear-btn" onclick="clearCalc()">C</button>
+        </div>
+
+        <hr style="border-color:#555; margin:14px 0;">
+
+        <h3 style="color:#fff; margin:0 0 8px 0;">Ohm Kanunu</h3>
+        <select id="calculateFor" style="margin-bottom:8px;">
+            <option value="V">Gerilim (V)</option>
+            <option value="I">Akım (I)</option>
+            <option value="R">Direnç (R)</option>
+        </select>
+        <div class="row ohm-inputs">
+            <input type="number" id="value1" placeholder="Birinci değer">
+            <input type="number" id="value2" placeholder="İkinci değer">
+            <button onclick="calculateOhm()">Hesapla</button>
+        </div>
+        <div id="result" class="result"></div>
+
+        <hr style="border-color:#555; margin:14px 0;">
+
+        <h3 style="color:#fff; margin:0 0 8px 0;">Formüller</h3>
+        <select id="formulaSelect" onchange="selectFormula()">
+            <option value="">Formül Seç</option>
+            <option value="areaSquare">Kare Alanı a²</option>
+            <option value="areaRectangle">Dikdörtgen a*b</option>
+            <option value="areaCircle">Daire π r²</option>
+            <option value="volumeCube">Küp a³</option>
+            <option value="volumeCylinder">Silindir π r² h</option>
+            <option value="kineticEnergy">Kinetik Enerji 0.5 m v²</option>
+            <option value="potentialEnergy">Potansiyel Enerji m g h</option>
+        </select>
+        <div id="formulaInputs" style="margin-top:8px;"></div>
+        <button onclick="calculateFormula()" style="margin-top:8px;">Hesapla</button>
+        <div id="formulaResult" class="result"></div>
+
+        <hr style="border-color:#555; margin:14px 0;">
+
+        <h3 style="color:#fff; margin:0 0 8px 0;">Birim Dönüştürücü</h3>
+        <select id="unitType" onchange="updateUnits()">
+            <option value="">Birim Tipi</option>
+            <option value="length">Uzunluk</option>
+            <option value="weight">Ağırlık</option>
+            <option value="temperature">Sıcaklık</option>
+            <option value="volume">Hacim</option>
+        </select>
+        <div class="row" style="margin-top:8px;">
+            <input type="number" id="unitValue" placeholder="Değer Girin">
+            <select id="unitFrom"></select>
+            <select id="unitTo"></select>
+            <button onclick="convertUnit()">Dönüştür</button>
+        </div>
+        <div id="unitResult" class="result"></div>
+    </div>
+    `;
+}
+
+/* =========================
+   HESAP MAKİNESİ FONKSİYONLARI
+   ========================= */
+
+/* Gelişmiş faktöriyel desteği:
+   Hem "5!" hem "(2+3)!" gibi durumları mathjs factorial(...) şeklinde çevirir.
+*/
+function initializeCalculator(){
+    displayEl = document.getElementById('display');
+    updateUnits(); // birim dropdownlarını güncelle
+}
+
+function appendCalc(val){
+    if(!displayEl) return;
+    // basit güvenlik: gereksiz uzunluk engelle
+    if(displayEl.value.length > 500) return;
+    displayEl.value += val;
+}
+
+function clearCalc(){
+    if(!displayEl) return;
+    displayEl.value = '';
+}
+
+function evaluateCalc(){
+    try{
+        if(!displayEl) return;
+        let expr = displayEl.value;
+        // ln -> natural log, log -> log10 handling (keep both)
+        expr = expr.replace(/\bln\(/g, 'log(');
+        // convert occurrences like "(...)" or number followed by ! into factorial(...)
+        expr = expr.replace(/(\([^()]+\)|\d+)!/g, 'factorial($1)');
+        // handle percent signs simply: replace % by /100
+        expr = expr.replace(/%/g, '/100');
+        const res = math.evaluate(expr);
+        displayEl.value = (typeof res === 'number' || typeof res === 'string') ? res.toString() : JSON.stringify(res);
+    }catch(err){
+        displayEl.value = 'Hata';
+    }
+}
+
+function calculatePercentage(){
+    try{
+        if(!displayEl) return;
+        let expr = displayEl.value.replace(/%/g, '/100');
+        expr = expr.replace(/(\([^()]+\)|\d+)!/g, 'factorial($1)');
+        displayEl.value = math.evaluate(expr);
+    }catch(e){
+        displayEl.value = 'Hata';
+    }
+}
+
+/* Ohm, Formüler, Unit converter */
+
+const units = {
+    length:{ m:1, cm:0.01, km:1000, inch:0.0254, mile:1609.34 },
+    weight:{ kg:1, g:0.001, lb:0.453592, ton:1000 },
+    volume:{ L:1, mL:0.001, m3:1000, gallon:3.78541 }
+};
+
+function calculateOhm(){
+    const calcFor = document.getElementById('calculateFor').value;
+    const v1 = parseFloat(document.getElementById('value1').value);
+    const v2 = parseFloat(document.getElementById('value2').value);
+    const resEl = document.getElementById('result');
+    if(isNaN(v1) || isNaN(v2)){ resEl.innerText = 'Lütfen geçerli değer girin!'; return; }
+    let r;
+    switch(calcFor){
+        case 'V': r = v1 * v2; resEl.innerText = `Gerilim V = ${r.toFixed(4)} V`; break;
+        case 'I': if(v2===0){ resEl.innerText='Direnç 0 olamaz!'; return;} r = v1 / v2; resEl.innerText = `Akım I = ${r.toFixed(4)} A`; break;
+        case 'R': if(v2===0){ resEl.innerText='Akım 0 olamaz!'; return;} r = v1 / v2; resEl.innerText = `Direnç R = ${r.toFixed(4)} Ω`; break;
+    }
+}
+
+function selectFormula(){
+    const f = document.getElementById('formulaSelect').value;
+    const container = document.getElementById('formulaInputs');
+    container.innerHTML = '';
+    switch(f){
+        case 'areaSquare': container.innerHTML = '<input id="a" type="number" placeholder="Kenar a">'; break;
+        case 'areaRectangle': container.innerHTML = '<input id="a" type="number" placeholder="Kenar a"><input id="b" type="number" placeholder="Kenar b">'; break;
+        case 'areaCircle': container.innerHTML = '<input id="r" type="number" placeholder="Yarıçap r">'; break;
+        case 'volumeCube': container.innerHTML = '<input id="a" type="number" placeholder="Kenar a">'; break;
+        case 'volumeCylinder': container.innerHTML = '<input id="r" type="number" placeholder="Yarıçap r"><input id="h" type="number" placeholder="Yükseklik h">'; break;
+        case 'kineticEnergy': container.innerHTML = '<input id="m" type="number" placeholder="Kütle m (kg)"><input id="v" type="number" placeholder="Hız v (m/s)">'; break;
+        case 'potentialEnergy': container.innerHTML = '<input id="m" type="number" placeholder="Kütle m (kg)"><input id="h" type="number" placeholder="Yükseklik h (m)">'; break;
+    }
+}
+
+function calculateFormula(){
+    const f = document.getElementById('formulaSelect').value;
+    const out = document.getElementById('formulaResult');
+    const val = id => parseFloat(document.getElementById(id)?.value);
+    let res;
+    switch(f){
+        case 'areaSquare': res = Math.pow(val('a'),2); break;
+        case 'areaRectangle': res = val('a') * val('b'); break;
+        case 'areaCircle': res = Math.PI * Math.pow(val('r'),2); break;
+        case 'volumeCube': res = Math.pow(val('a'),3); break;
+        case 'volumeCylinder': res = Math.PI * Math.pow(val('r'),2) * val('h'); break;
+        case 'kineticEnergy': res = 0.5 * val('m') * Math.pow(val('v'),2); break;
+        case 'potentialEnergy': res = val('m') * 9.81 * val('h'); break;
+        default: out.innerText = 'Lütfen bir formül seçin.'; return;
+    }
+    if(isNaN(res)) out.innerText = 'Lütfen tüm değerleri girin.'; else out.innerText = 'Sonuç: ' + res.toFixed(4);
+}
+
+function updateUnits(){
+    const type = document.getElementById('unitType').value;
+    const from = document.getElementById('unitFrom');
+    const to = document.getElementById('unitTo');
+    if(!from || !to) return;
+    from.innerHTML = ''; to.innerHTML = '';
+    if(type === 'temperature'){
+        ['C','F','K'].forEach(u => { from.innerHTML += `<option value="${u}">${u}</option>`; to.innerHTML += `<option value="${u}">${u}</option>`; });
+        return;
+    }
+    if(units[type]){
+        Object.keys(units[type]).forEach(u => { from.innerHTML += `<option value="${u}">${u}</option>`; to.innerHTML += `<option value="${u}">${u}</option>`; });
+    }
+}
+
+function convertUnit(){
+    const type = document.getElementById('unitType').value;
+    let val = parseFloat(document.getElementById('unitValue').value);
+    const from = document.getElementById('unitFrom').value;
+    const to = document.getElementById('unitTo').value;
+    const out = document.getElementById('unitResult');
+    if(isNaN(val)){ out.innerText = 'Lütfen bir değer girin!'; return; }
+    let result;
+    if(type === 'temperature'){
+        if(from==='C'){ result = to==='F'? val*9/5+32 : to==='K'? val+273.15 : val; }
+        else if(from==='F'){ result = to==='C'? (val-32)*5/9 : to==='K'? (val-32)*5/9+273.15 : val; }
+        else if(from==='K'){ result = to==='C'? val-273.15 : to==='F'? (val-273.15)*9/5+32 : val; }
+    } else if(units[type]){
+        result = val * units[type][from] / units[type][to];
+    }
+    if(result !== undefined) out.innerText = 'Sonuç: ' + result.toFixed(6);
+    else out.innerText = 'Geçersiz seçim.';
+}
+
+/* =========================
+   NOTLAR (ID-BAZLI + XSS KORUMALI)
+   ========================= */
+
+/* HTML escape fonksiyonu — kaydetmeden önce kullan */
+function escapeHTML(str){
+    if(str === null || str === undefined) return '';
+    return String(str).replace(/[&<>"']/g, function (m) {
+      return ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[m];
     });
-  </script>
+}
+
+function addNote(){
+    const tEl = document.getElementById('noteTitle');
+    const cEl = document.getElementById('noteContent');
+    if(!tEl || !cEl) return;
+
+    const rawTitle = tEl.value.trim();
+    const rawContent = cEl.value.trim();
+    if(rawTitle === '' && rawContent === '') return;
+
+    // XSS koruması: saklamadan önce kaçış
+    const title = escapeHTML(rawTitle);
+    const content = escapeHTML(rawContent);
+
+    const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+    notes.push({ id: Date.now(), title, content });
+    localStorage.setItem('notes', JSON.stringify(notes));
+    tEl.value = ''; cEl.value = '';
+    renderNotes();
+}
+
+function renderNotes(){
+    const listEl = document.getElementById('noteList');
+    if(!listEl) return;
+    const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+    const searchRaw = document.getElementById('noteSearch')?.value || '';
+    const search = searchRaw.toLowerCase();
+
+    const filtered = notes.filter(n => (n.title || '').toLowerCase().includes(search) || (n.content || '').toLowerCase().includes(search));
+    if(filtered.length === 0){ listEl.innerHTML = '<div style="color:var(--muted)">Not bulunamadı.</div>'; return; }
+
+    // not.title / not.content zaten escape'lenmiş olarak saklanıyor -> güvenle innerHTML ile koyuyoruz
+    listEl.innerHTML = filtered.map(n => `
+        <div class="note-item">
+            <div class="meta">
+                <strong>${n.title || 'Başlıksız'}</strong>
+                <div>${n.content}</div>
+                <div style="margin-top:8px; font-size:12px; color:var(--muted);">${new Date(n.id).toLocaleString()}</div>
+            </div>
+            <div class="note-actions">
+                <button onclick="editNotePrompt(${n.id})">Düzenle</button>
+                <button onclick="deleteNote(${n.id})" style="background:transparent;color:var(--accent);border:none;font-size:18px;cursor:pointer;">🗑️</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function deleteNote(id){
+    const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+    const filtered = notes.filter(n => n.id !== id);
+    localStorage.setItem('notes', JSON.stringify(filtered));
+    renderNotes();
+}
+
+function editNotePrompt(id){
+    const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+    const note = notes.find(n => n.id === id);
+    if(!note) return;
+    // decode for prompt display — stored value is escaped HTML; we want plain text in prompt
+    const decodedTitle = decodeHTML(note.title);
+    const decodedContent = decodeHTML(note.content);
+
+    const newTitleRaw = prompt('Başlık (iptal için "İptal" veya Esc):', decodedTitle);
+    if(newTitleRaw === null) return; // iptal
+    const newContentRaw = prompt('İçerik (iptal için Esc):', decodedContent);
+    if(newContentRaw === null) return;
+
+    // saklamadan önce escape
+    note.title = escapeHTML(newTitleRaw.trim());
+    note.content = escapeHTML(newContentRaw.trim());
+    localStorage.setItem('notes', JSON.stringify(notes));
+    renderNotes();
+}
+
+/* decode helper — sadece prompt/editleme gibi kullanıcıya geri gösterirken kullanılır */
+function decodeHTML(str){
+    if(!str) return '';
+    const txt = document.createElement('textarea');
+    txt.innerHTML = str;
+    return txt.value;
+}
+
+/* =========================
+   MASAL ÜRETİCİ (Basit entegrasyon)
+   ========================= */
+const yasKurallari = {
+    "2-3": { kelimeSiniri:40, ek:'2-3 kelimelik kısa cümleler. Bol tekrar ve ses ekle.' },
+    "3-4": { kelimeSiniri:70, ek:'Kısa cümleler, basit kelimeler.' },
+    "5-6": { kelimeSiniri:150, ek:'Biraz daha uzun cümleler. Basit öğretici bir ders olsun.' },
+    "okul-oncesi": { kelimeSiniri:100, ek:'Sevimli ve sıcak bir hikaye yaz.' }
+};
+
+function setMasalLoading(isLoading){
+    const s = document.getElementById('masalSpinner');
+    const btn = document.getElementById('masalUretBtn');
+    if(!s || !btn) return;
+    if(isLoading){ s.style.display='block'; btn.disabled=true; btn.innerText='Üretiliyor...'; document.getElementById('masalSonuc').innerText=''; }
+    else{ s.style.display='none'; btn.disabled=false; btn.innerText='✨ Masal Üret ✨'; }
+}
+
+async function uretMasal(){
+    const kahramanRaw = (document.getElementById('masalKahraman')?.value || '').trim();
+    const yerRaw = (document.getElementById('masalYer')?.value || '').trim();
+    const konuRaw = (document.getElementById('masalKonu')?.value || 'Dostluk').trim();
+    const duyguRaw = (document.getElementById('masalDuygu')?.value || 'Neşeli').trim();
+    const yas = document.getElementById('masalYas')?.value || 'okul-oncesi';
+    const sonucEl = document.getElementById('masalSonuc');
+
+    if(!kahramanRaw || !yerRaw){ sonucEl.innerText = 'Lütfen Kahraman ve Yer alanlarını doldurun.'; return; }
+
+    setMasalLoading(true);
+    const { kelimeSiniri, ek } = yasKurallari[yas];
+
+    // Basit client-side fallback masal (backend yoksa): 
+    try{
+        const fallback = `${kahramanRaw} ${yerRaw}’de dolaşırken küçük bir sır keşfetti. ${kahramanRaw} ve arkadaşları birlikte ${konuRaw.toLowerCase()} öğrendiler.`;
+        await new Promise(r=>setTimeout(r,500));
+        sonucEl.innerText = fallback;
+    }catch(err){
+        sonucEl.innerText = 'Masal üretimi sırasında hata: ' + (err.message || err);
+    }finally{
+        setMasalLoading(false);
+    }
+}
+
+// Masalı Notlar'a kaydet (kaydederken escape)
+function saveMasalToNotes(){
+    const text = document.getElementById('masalSonuc')?.innerText || '';
+    if(!text) { alert('Kaydetilecek bir masal yok'); return; }
+    const notes = JSON.parse(localStorage.getItem('notes') || '[]');
+    notes.push({ id: Date.now(), title: escapeHTML('Masal - ' + new Date().toLocaleString()), content: escapeHTML(text) });
+    localStorage.setItem('notes', JSON.stringify(notes));
+    alert('Masal Notlarınıza kaydedildi');
+}
+
+/* =========================
+   AYARLAR (localStorage)
+   ========================= */
+
+function toggleDarkMode(){
+    const isDark = document.body.classList.toggle('dark');
+    localStorage.setItem('darkMode', isDark ? 'true' : 'false');
+    if(currentContent === 'settings') loadContent('settings'); // buton label güncelle
+}
+
+function changeLanguage(lang){
+    localStorage.setItem('language', lang);
+    alert('Dil kaydedildi: ' + (lang === 'tr' ? 'Türkçe' : 'English'));
+}
+
+function changeFontSize(size){
+    if(size === 'small') document.documentElement.style.fontSize = '14px';
+    else if(size === 'normal') document.documentElement.style.fontSize = '16px';
+    else if(size === 'large') document.documentElement.style.fontSize = '18px';
+    localStorage.setItem('fontSize', size);
+}
+
+function loadSettingsFromStorage(){
+    if(localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark');
+    const font = localStorage.getItem('fontSize') || 'normal';
+    changeFontSize(font);
+}
+
+/* =========================
+   EXPOSE & HELPERS
+   ========================= */
+
+function ensureMenuClosed(){ closeMenuIfOpen(); }
+
+/* expose some functions to global for onclick binding in HTML strings */
+window.loadContent = loadContent;
+window.toggleMenu = toggleMenu;
+window.handleSearch = handleSearch;
+window.appendCalc = appendCalc;
+window.clearCalc = clearCalc;
+window.evaluateCalc = evaluateCalc;
+window.calculatePercentage = calculatePercentage;
+window.initializeCalculator = initializeCalculator;
+window.updateUnits = updateUnits;
+window.selectFormula = selectFormula;
+window.calculateFormula = calculateFormula;
+window.calculateOhm = calculateOhm;
+window.convertUnit = convertUnit;
+window.addNote = addNote;
+window.renderNotes = renderNotes;
+window.deleteNote = deleteNote;
+window.editNotePrompt = editNotePrompt;
+window.toggleDarkMode = toggleDarkMode;
+window.changeLanguage = changeLanguage;
+window.changeFontSize = changeFontSize;
+window.uretMasal = uretMasal;
+window.saveMasalToNotes = saveMasalToNotes;
+
+/* initApp was called on body.onload */
+</script>
 </body>
 </html>
