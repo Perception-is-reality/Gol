@@ -1,95 +1,170 @@
-<!doctype html>
-<html lang="tr">
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>InsightReads</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsightReads | Akıllı Araçlar Merkezi</title>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.12.0/math.min.js"></script>
+  <!-- 🎨 Stiller -->
+  <link rel="stylesheet" href="css/style.css">
 
-    <link rel="stylesheet" href="style.css">
-    
-<header class="site-header">
-  <div class="logo-area" id="logoHomeLink">
-    <img src="logo.svg" alt="InsightReads Logo" class="logo-img" onerror="this.src='logo.png'">
-    <div class="site-title">
-      <span class="name">InsightReads</span>
-      <span class="tagline">Bilgi ve Araçlar</span>
-    </div>
-  </div>
+  <!-- 📚 Harici Kütüphaneler -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.1/math.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
 
-  <div class="header-right">
-    <div class="search-box">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-      <input type="text" id="searchInput" placeholder="Araç, not, hesap...">
-    </div>
+<body>
+  <!-- 🌈 SVG Gradyan -->
+  <svg width="0" height="0">
+    <defs>
+      <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:var(--accent);stop-opacity:1" />
+        <stop offset="100%" style="stop-color:var(--accent-2);stop-opacity:1" />
+      </linearGradient>
+    </defs>
+  </svg>
 
-    <button class="menu-btn" id="menuBtn" aria-label="Menüyü aç/kapat">
-      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" stroke="url(#gold)" stroke-width="2" viewBox="0 0 24 24">
-        <defs>
-          <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#C5A572"/>
-            <stop offset="100%" stop-color="#FCD34D"/>
-          </linearGradient>
-        </defs>
-        <line x1="4" y1="6" x2="20" y2="6"/>
-        <line x1="4" y1="12" x2="20" y2="12"/>
-        <line x1="4" y1="18" x2="20" y2="18"/>
-      </svg>
-    </button>
-  </div>
-</header>
-
-    <nav id="menu">
-        <a href="#" data-content="tools">📂 Araçlar</a>
-        <a href="#" data-content="notes">📝 Notlarım</a>
-        <a href="#" data-content="settings">⚙️ Ayarlar</a>
-        <a href="#" data-content="masal">✍️ Metin Taslağı</a> 
-        <a href="#" id="petitionLink">📄 Dilekçe</a>
-        <a href="#" id="helpLink">❓ Yardım</a>
-    </nav>
-
-    <div class="overlay" id="overlay"></div>
-
-    <main id="main-content">
-        </main>
-    
-    <footer>
-        <div class="footer-content">
-            
-            <div class="footer-section">
-                <h4>Hızlı Bağlantılar</h4>
-                <a href="#" data-content="tools">Araçlar</a>
-                <a href="#" data-content="notes">Notlarım</a>
-                <a href="#" data-content="settings">Ayarlar</a>
-                <a href="#" data-content="masal">Masal Taslak</a>
-            </div>                                            
-            <div class="footer-section">
-                <a href="#" onclick="openModal('Vizyonumuz', 'Bilgiyi erişilebilir kılmak.')">Vizyonumuz</a>
-<a href="#" onclick="openModal('İletişim', 'info@insightreads.com')">İletişim</a>
-<a href="#" onclick="openModal('Gizlilik Politikası', 'Gizlilik Politikası yakında...')">Gizlilik Politikası</a>
-<a href="#" onclick="openModal('Kullanım Şartları', 'Kullanım Şartları yakında...')">Kullanım Şartları</a>
-
-            </div>
-
-            <div class="footer-section">
-                <h4>Bizi Takip Edin</h4>
-                <div class="social-icons">
-                    <a href="https://twitter.com" target="_blank">𝕏</a>
-                    <a href="https://facebook.com" target="_blank">f</a>
-                    <a href="https://instagram.com" target="_blank">📷</a>
-                    <a href="https://linkedin.com" target="_blank">in</a>
-                </div>
-            </div>
-
-            <div class="copyright">
-                &copy; 2024 InsightReads. Tüm hakları saklıdır.
-            </div>
+  <!-- 🧭 Üst Başlık -->
+  <header class="site-header">
+    <!-- 🔹 Üst Kat: Logo + Başlık -->
+    <div class="header-top">
+      <a href="#" class="logo-area" id="logoHomeLink" onclick="AppCore.Router.load('home')">
+        <img src="logo.svg" alt="InsightReads Logo" class="logo-img" onerror="this.onerror=null; this.src='logo.png';">
+        <div class="site-title">
+          <span class="name">InsightReads</span>
+          <span class="tagline">Bilgi ve Araçlar</span>
         </div>
-    </footer>
-    <script src="app.js"></script>
+      </a>
+    </div>
+
+    <!-- 🔸 Alt Kat: Arama + Menü Tuşu -->
+    <div class="header-bottom">
+      <form role="search" class="search-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Sayfa Ara...">
+      </form>
+
+      <button id="menuButton" class="menu-btn" aria-controls="menu" aria-expanded="false">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+        <line x1="3" y1="12" x2="21" y2="12" stroke="url(#gold)" />
+        <line x1="3" y1="6" x2="21" y2="6" stroke="url(#gold)" />
+        <line x1="3" y1="18" x2="21" y2="18" stroke="url(#gold)" />
+    </svg>
+</button>
+    </div>
+  </header>
+
+  <!-- 📄 Ana İçerik -->
+  <main id="app-content"></main>
+
+  <!-- 🚀 Hızlı Erişim Butonu -->
+  <button id="fabButton" aria-label="Hesaplama Merkezi'ne Git">🚀</button>
+
+  <!-- ⚙️ Footer -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-section">
+        <h4>Uygulama</h4>
+        <a href="#" onclick="AppCore.Router.load('tools')">Tüm Araçlar</a>
+        <a href="#" onclick="AppCore.Router.load('notes')">Notlarım</a>
+      </div>
+      <div class="footer-section">
+        <h4>Yasal</h4>
+        <a href="#" id="privacyLink">Gizlilik Politikası</a>
+        <a href="#" id="termsLink">Kullanım Şartları</a>
+      </div>
+      <div class="footer-section">
+        <h4>Destek</h4>
+        <a href="#" id="helpLink">Yardım Merkezi</a>
+        <a href="#">İletişim</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2025 InsightReads. Tüm Hakları Saklıdır.
+    </div>
+  </footer>
+
+  <!-- 🔲 Arka Plan Overlay -->
+  <div id="overlay"></div>
+
+  <!-- 🧭 Yan Menü -->
+  <nav aria-label="Ana Menü" id="menu">
+    <div style="padding: 20px;">
+      <button class="close-btn" style="float:right;" onclick="toggleMenu()">✕</button>
+      <h3 style="margin-top: 0; color: var(--accent);">Menü</h3>
+
+      <ul class="menu-list">
+        <li>
+          <a href="#" onclick="toggleSubmenu(event, 'tools-submenu');" aria-expanded="false" aria-controls="tools-submenu">
+            🧰 Tüm Araçlar
+            <span id="tools-arrow" style="float:right; font-size:14px; margin-left:10px; transition:transform 0.3s ease;">►</span> 
+          </a>
+          <ul id="tools-submenu" class="submenu" style="display:none; padding-left:20px;">
+            <li><a href="#" onclick="AppCore.Router.load('calculator'); toggleMenu();">🧮 Hesaplama Merkezi</a></li>
+          </ul>
+        </li>
+        <li><a href="#" onclick="AppCore.Router.load('masal'); toggleMenu();">✨ Masal Üretici</a></li>
+        <li><a href="#" onclick="AppCore.Router.load('notes'); toggleMenu();">📝 Notlar & Dilekçe</a></li>
+        <li><a href="#" onclick="AppCore.Router.load('chat'); toggleMenu();">💬 Insight Chat</a></li>
+        <li><a href="#" onclick="AppCore.Router.load('posts'); toggleMenu();">📸 Paylaşım Konsolu</a></li>
+        <li><a href="#" onclick="AppCore.Router.load('settings'); toggleMenu();">⚙️ Ayarlar</a></li>
+        <li><a href="#" onclick="AppCore.Router.load('about'); toggleMenu();">💡 Hakkında / Yardım</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- 📄 Modal Bileşenleri -->
+  <div class="modal" id="petitionModal"></div>
+
+  <div class="modal-overlay" id="announcementModal" role="dialog" aria-modal="true" aria-labelledby="announcementTitle">
+    <div id="announcementBox" class="modal-content">
+      <div style="text-align:right;">
+        <button id="closeAnnouncementBtn" class="close-btn">✕</button>
+      </div>
+      <h3 id="announcementTitle">📣 InsightReads Duyuru!</h3>
+      <p><strong>LearningModelV10</strong> ile tüm sistem yenilendi — artık sohbet, masal ve hesaplamalar daha akıllı! 🧠</p>
+      <p class="muted">Kapatmak için '✕' simgesine dokunun.</p>
+    </div>
+  </div>
+
+ <!-- Önce bağımlılıklar -->
+<script src="js/learning_model_v10.js"></script>
+
+<!-- Ardından AppCore (app.js) -->
+<script src="js/app.js"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    try {
+      // Tema uygula ve son sayfayı yükle
+      AppCore?.Theme?.apply?.();
+      AppCore?.Router?.load(AppCore?.state?.currentPage || "home");
+
+      // 🚀 Hızlı buton yönlendirme
+      document.getElementById("fabButton")?.addEventListener("click", () => {
+        AppCore.Router.load("calculator");
+      });
+
+      // 🧠 Learning Model Entegrasyonu
+      if (typeof window.LearningModelV10 === "function" && window.AppCore) {
+        window.AppCore.LearningModel = new window.LearningModelV10({
+          order: 2,
+          storageKey: "lm_v10_main",
+          onNotify: (msg) => window.AppCore.showToast?.("🧠 " + msg, "neutral")
+        });
+        console.log("✅ LearningModelV10 başarıyla AppCore'a entegre edildi.");
+      } else {
+        console.warn("⚠️ LearningModelV10 veya AppCore yüklenemedi. Script sırasını kontrol et.");
+      }
+
+    } catch (e) {
+      console.error("🚨 Başlatma hatası:", e);
+    }
+  });
+  </script>
 </body>
 </html>
+
